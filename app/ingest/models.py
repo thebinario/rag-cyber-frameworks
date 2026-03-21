@@ -42,3 +42,19 @@ class ProcessedDocument:
 
     def to_dict(self) -> dict[str, object]:
         return asdict(self)
+
+
+@dataclass(frozen=True)
+class DocumentChunk:
+    chunk_id: str
+    document_id: str
+    title: str
+    framework: str
+    source_type: str
+    source_path: str
+    chunk_index: int
+    char_count: int
+    text: str
+
+    def to_dict(self) -> dict[str, object]:
+        return asdict(self)

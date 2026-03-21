@@ -13,6 +13,7 @@ data/
     osstmm/
     ptes/
   processed/
+    chunks/
     documents/
     manifests/
 ```
@@ -20,6 +21,7 @@ data/
 - `data/raw/` stores the original documents committed to the repository.
 - `data/processed/manifests/` stores generated catalog artifacts derived from the raw corpus.
 - `data/processed/documents/` stores one processed JSON file per source document.
+- `data/processed/chunks/` stores chunked representations derived from `clean_text`.
 
 ## Current sources
 
@@ -33,11 +35,12 @@ These files are treated as the canonical raw inputs for the ingestion pipeline.
 
 ## Objective of this stage
 
-The project currently has three completed ingestion stages:
+The project currently has four completed ingestion stages:
 
 1. inventory and manifest generation for raw files
 2. source loading and conversion into processed document JSON files
 3. conservative text cleaning and normalization
+4. chunk generation with overlap from cleaned text
 
 The generated manifest is written to:
 
@@ -46,6 +49,10 @@ The generated manifest is written to:
 The processed documents are written to:
 
 `data/processed/documents/`
+
+The generated chunks are written to:
+
+`data/processed/chunks/chunks.jsonl`
 
 ## Pipeline status
 
@@ -58,10 +65,10 @@ Implemented in this stage:
 - source loading for PDF, HTML, TXT, and Markdown
 - processed document JSON generation
 - conservative text cleaning with `clean_text`
+- chunk generation using `clean_text`
 
 Not implemented yet:
 
-- chunking
 - embeddings
 - vector indexing
 - retrieval
@@ -110,15 +117,36 @@ python scripts/clean_documents.py
 
 This reads the JSON files in `data/processed/documents/`, applies deterministic normalization to the existing `text` field, and writes the result back into `clean_text` without changing the original `text`.
 
+## Build chunks
+
+Run:
+
+```bash
+python scripts/build_chunks.py
+```
+
+This reads the processed documents, uses `clean_text` as the chunking source, generates character-based chunks with overlap, and writes the output to `data/processed/chunks/chunks.jsonl`.
+
+Each chunk record includes:
+
+- `chunk_id`
+- `document_id`
+- `title`
+- `framework`
+- `source_type`
+- `source_path`
+- `chunk_index`
+- `char_count`
+- `text`
+
 ## Next steps
 
-This stage intentionally does not implement chunking, embeddings, retrieval, or answer generation. The cleaning step is conservative and does not summarize, rewrite, or remove technical content.
+This stage intentionally does not implement embeddings, retrieval, vector storage, or answer generation. Chunking is character-based, conservative, and does not mix documents.
 
 ## Next steps
 
 Planned next pipeline stages:
 
-1. chunk generation per document using `clean_text`
-2. embedding creation
-3. vector database indexing
-4. retrieval and response orchestration
+1. embedding creation from generated chunks
+2. vector database indexing
+3. retrieval and response orchestration
