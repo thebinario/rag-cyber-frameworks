@@ -33,10 +33,11 @@ These files are treated as the canonical raw inputs for the ingestion pipeline.
 
 ## Objective of this stage
 
-The project currently has two completed ingestion stages:
+The project currently has three completed ingestion stages:
 
 1. inventory and manifest generation for raw files
 2. source loading and conversion into processed document JSON files
+3. conservative text cleaning and normalization
 
 The generated manifest is written to:
 
@@ -56,6 +57,7 @@ Implemented in this stage:
 - manifest loading primitives
 - source loading for PDF, HTML, TXT, and Markdown
 - processed document JSON generation
+- conservative text cleaning with `clean_text`
 
 Not implemented yet:
 
@@ -89,22 +91,34 @@ This reads the manifest, loads each source document, extracts raw text, and writ
 Each processed JSON preserves the manifest metadata and adds:
 
 - `text`
+- `clean_text`
 - `processing_status`
 - `loader_type`
 - `processed_at`
 - `error`
 - `output_path`
 
+The `text` field preserves the extracted content as loaded from the source. The `clean_text` field stores a conservative normalized version for downstream processing.
+
+## Clean processed documents
+
+Run:
+
+```bash
+python scripts/clean_documents.py
+```
+
+This reads the JSON files in `data/processed/documents/`, applies deterministic normalization to the existing `text` field, and writes the result back into `clean_text` without changing the original `text`.
+
 ## Next steps
 
-This stage intentionally does not implement chunking, advanced text cleaning, embeddings, retrieval, or answer generation.
+This stage intentionally does not implement chunking, embeddings, retrieval, or answer generation. The cleaning step is conservative and does not summarize, rewrite, or remove technical content.
 
 ## Next steps
 
 Planned next pipeline stages:
 
-1. richer normalization and cleanup of extracted text
-2. chunk generation per document
-3. embedding creation
-4. vector database indexing
-5. retrieval and response orchestration
+1. chunk generation per document using `clean_text`
+2. embedding creation
+3. vector database indexing
+4. retrieval and response orchestration

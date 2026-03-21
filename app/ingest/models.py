@@ -35,6 +35,7 @@ class ProcessedDocument:
     processing_status: str
     loader_type: str
     text: str
+    clean_text: str
     error: str | None
     processed_at: str
     output_path: str

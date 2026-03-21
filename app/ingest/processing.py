@@ -4,6 +4,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
+from .cleaner import clean_text
 from .loader import load_documents_manifest
 from .models import DocumentMetadata, ProcessedDocument
 from .source_loaders import get_source_loader
@@ -21,11 +22,13 @@ def build_processed_document(
     try:
         loader_type, loader = get_source_loader(source_path)
         text = loader(source_path)
+        cleaned_text = clean_text(text)
         processing_status = "processed"
         error = None
     except Exception as exc:
         loader_type = source_path.suffix.lower().lstrip(".") or "unknown"
         text = ""
+        cleaned_text = ""
         processing_status = "failed"
         error = str(exc)
 
@@ -41,6 +44,7 @@ def build_processed_document(
         processing_status=processing_status,
         loader_type=loader_type,
         text=text,
+        clean_text=cleaned_text,
         error=error,
         processed_at=processed_at,
         output_path=output_path.relative_to(repo_root).as_posix(),
