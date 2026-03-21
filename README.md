@@ -17,6 +17,8 @@ data/
     documents/
     embeddings/
     manifests/
+  vectorstore/
+    chroma/
 ```
 
 - `data/raw/` stores the original documents committed to the repository.
@@ -24,6 +26,7 @@ data/
 - `data/processed/documents/` stores one processed JSON file per source document.
 - `data/processed/chunks/` stores chunked representations derived from `clean_text`.
 - `data/processed/embeddings/` stores chunk embeddings generated locally with Ollama.
+- `data/vectorstore/chroma/` stores the persistent local Chroma index built from chunk embeddings.
 
 ## Current sources
 
@@ -37,13 +40,14 @@ These files are treated as the canonical raw inputs for the ingestion pipeline.
 
 ## Objective of this stage
 
-The project currently has five completed ingestion stages:
+The project currently has six completed ingestion stages:
 
 1. inventory and manifest generation for raw files
 2. source loading and conversion into processed document JSON files
 3. conservative text cleaning and normalization
 4. chunk generation with overlap from cleaned text
 5. local embedding generation from chunks with Ollama
+6. local vector indexing with Chroma and semantic top-k search
 
 The generated manifest is written to:
 
@@ -61,6 +65,10 @@ The generated embeddings are written to:
 
 `data/processed/embeddings/chunk_embeddings.jsonl`
 
+The generated vector index is written to:
+
+`data/vectorstore/chroma/`
+
 ## Pipeline status
 
 Implemented in this stage:
@@ -74,10 +82,11 @@ Implemented in this stage:
 - conservative text cleaning with `clean_text`
 - chunk generation using `clean_text`
 - local embedding generation with Ollama
+- persistent vector indexing with Chroma
+- semantic top-k search over indexed chunks
 
 Not implemented yet:
 
-- vector indexing
 - retrieval
 - answer generation
 - API layer
@@ -165,6 +174,7 @@ Optional environment variables:
 ```bash
 set OLLAMA_BASE_URL=http://127.0.0.1:11434
 set OLLAMA_EMBED_MODEL=nomic-embed-text
+set OLLAMA_TIMEOUT_SECONDS=10
 ```
 
 Run:
@@ -181,13 +191,45 @@ Each embedding record preserves the chunk metadata and adds:
 - `embedding`
 - `error`
 
-## Next steps
+## Build the vector index
 
-This stage intentionally does not implement vector storage, retrieval, answer generation, or an API. Embeddings are generated locally and saved as JSONL only.
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run:
+
+```bash
+python scripts/build_vector_index.py
+```
+
+This reads `data/processed/embeddings/chunk_embeddings.jsonl`, indexes all records with valid embeddings, and persists the Chroma database in `data/vectorstore/chroma/`.
+
+Indexed records store:
+
+- chunk ids
+- embeddings
+- chunk texts
+- chunk metadata
+
+## Search indexed chunks
+
+Make sure Ollama is running locally because the query embedding is generated at search time.
+
+Run:
+
+```bash
+python scripts/search_chunks.py "nist cybersecurity framework" --top-k 5
+```
+
+This loads the persistent Chroma index, embeds the query with Ollama, and prints the top-k semantic matches with chunk metadata and text previews.
 
 ## Next steps
 
 Planned next pipeline stages:
 
-1. vector database indexing
-2. retrieval and response orchestration
+1. retrieval and response orchestration
+2. answer generation
+3. API layer
