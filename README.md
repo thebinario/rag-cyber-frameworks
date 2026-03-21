@@ -40,7 +40,7 @@ These files are treated as the canonical raw inputs for the ingestion pipeline.
 
 ## Objective of this stage
 
-The project currently has seven completed ingestion stages:
+The project currently has eight completed ingestion stages:
 
 1. inventory and manifest generation for raw files
 2. source loading and conversion into processed document JSON files
@@ -49,6 +49,7 @@ The project currently has seven completed ingestion stages:
 5. local embedding generation from chunks with Ollama
 6. local vector indexing with Chroma and semantic top-k search
 7. retrieval of ranked chunks and formatting of context for generation
+8. grounded answer generation with retrieved context and Ollama
 
 The generated manifest is written to:
 
@@ -86,10 +87,10 @@ Implemented in this stage:
 - persistent vector indexing with Chroma
 - semantic top-k search over indexed chunks
 - retrieval-ready context assembly from ranked chunks
+- grounded answer generation from retrieved context
 
 Not implemented yet:
 
-- answer generation
 - API layer
 
 ## Generate the manifest
@@ -175,6 +176,7 @@ Optional environment variables:
 ```bash
 set OLLAMA_BASE_URL=http://127.0.0.1:11434
 set OLLAMA_EMBED_MODEL=nomic-embed-text
+set OLLAMA_GENERATE_MODEL=llama3.2
 set OLLAMA_TIMEOUT_SECONDS=10
 ```
 
@@ -250,9 +252,38 @@ This step:
 - returns structured retrieval results with metadata and distance
 - optionally formats the retrieved chunks into a single text context block
 
+## Ask the full RAG pipeline
+
+Pull a local generation model:
+
+```bash
+ollama pull llama3.2
+```
+
+Run the full retrieval + generation flow:
+
+```bash
+python scripts/ask_rag.py "What does CSF 2.0 describe?" --top-k 3
+```
+
+Or include the grounded context used for the answer:
+
+```bash
+python scripts/ask_rag.py "What does CSF 2.0 describe?" --top-k 3 --show-context
+```
+
+This step:
+
+- retrieves the top-k relevant chunks
+- formats the retrieved context
+- builds a grounded prompt
+- generates an answer with Ollama
+- prints the answer and the retrieved sources
+
+The generator is instructed to answer only from the retrieved context. When there is not enough evidence, it should return a clear insufficiency message instead of inventing details.
+
 ## Next steps
 
 Planned next pipeline stages:
 
-1. answer generation
-2. API layer
+1. API layer

@@ -4,7 +4,7 @@ import json
 from urllib import error, request
 
 
-class OllamaEmbeddingClient:
+class OllamaClient:
     def __init__(self, base_url: str, model: str, timeout_seconds: int = 60) -> None:
         self.base_url = base_url.rstrip("/")
         self.model = model
@@ -23,17 +23,11 @@ class OllamaEmbeddingClient:
         except error.URLError as exc:
             raise RuntimeError(f"Could not connect to Ollama at {self.base_url}: {exc.reason}") from exc
 
-    def embed(self, text: str) -> list[float]:
-        payload = json.dumps(
-            {
-                "model": self.model,
-                "input": text,
-            }
-        ).encode("utf-8")
-        endpoint = f"{self.base_url}/api/embed"
+    def _post_json(self, endpoint: str, payload: dict[str, object]) -> dict[str, object]:
+        raw_payload = json.dumps(payload).encode("utf-8")
         http_request = request.Request(
-            endpoint,
-            data=payload,
+            f"{self.base_url}{endpoint}",
+            data=raw_payload,
             headers={"Content-Type": "application/json"},
             method="POST",
         )
@@ -48,9 +42,20 @@ class OllamaEmbeddingClient:
             raise RuntimeError(f"Could not connect to Ollama at {self.base_url}: {exc.reason}") from exc
 
         try:
-            payload = json.loads(raw_body)
+            return json.loads(raw_body)
         except json.JSONDecodeError as exc:
             raise RuntimeError("Ollama returned invalid JSON") from exc
+
+
+class OllamaEmbeddingClient(OllamaClient):
+    def embed(self, text: str) -> list[float]:
+        payload = self._post_json(
+            "/api/embed",
+            {
+                "model": self.model,
+                "input": text,
+            },
+        )
 
         embeddings = payload.get("embeddings")
         if isinstance(embeddings, list) and embeddings:
@@ -63,3 +68,21 @@ class OllamaEmbeddingClient:
             return embedding
 
         raise RuntimeError("Ollama response did not contain a usable embedding")
+
+
+class OllamaGenerationClient(OllamaClient):
+    def generate(self, prompt: str) -> str:
+        payload = self._post_json(
+            "/api/generate",
+            {
+                "model": self.model,
+                "prompt": prompt,
+                "stream": False,
+            },
+        )
+
+        response_text = payload.get("response")
+        if isinstance(response_text, str) and response_text.strip():
+            return response_text.strip()
+
+        raise RuntimeError("Ollama response did not contain a usable text generation")
