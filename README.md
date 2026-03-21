@@ -40,7 +40,7 @@ These files are treated as the canonical raw inputs for the ingestion pipeline.
 
 ## Objective of this stage
 
-The project currently has six completed ingestion stages:
+The project currently has seven completed ingestion stages:
 
 1. inventory and manifest generation for raw files
 2. source loading and conversion into processed document JSON files
@@ -48,6 +48,7 @@ The project currently has six completed ingestion stages:
 4. chunk generation with overlap from cleaned text
 5. local embedding generation from chunks with Ollama
 6. local vector indexing with Chroma and semantic top-k search
+7. retrieval of ranked chunks and formatting of context for generation
 
 The generated manifest is written to:
 
@@ -84,10 +85,10 @@ Implemented in this stage:
 - local embedding generation with Ollama
 - persistent vector indexing with Chroma
 - semantic top-k search over indexed chunks
+- retrieval-ready context assembly from ranked chunks
 
 Not implemented yet:
 
-- retrieval
 - answer generation
 - API layer
 
@@ -226,10 +227,32 @@ python scripts/search_chunks.py "nist cybersecurity framework" --top-k 5
 
 This loads the persistent Chroma index, embeds the query with Ollama, and prints the top-k semantic matches with chunk metadata and text previews.
 
+## Retrieve formatted context
+
+Use the retrieval layer when you want structured results plus a context block that can feed the next generation step.
+
+Run:
+
+```bash
+python scripts/retrieve_context.py "nist cybersecurity framework" --top-k 3
+```
+
+Or print the formatted context as well:
+
+```bash
+python scripts/retrieve_context.py "penetration testing reporting" --top-k 3 --show-context
+```
+
+This step:
+
+- generates an embedding for the query with Ollama
+- consults the persistent Chroma index
+- returns structured retrieval results with metadata and distance
+- optionally formats the retrieved chunks into a single text context block
+
 ## Next steps
 
 Planned next pipeline stages:
 
-1. retrieval and response orchestration
-2. answer generation
-3. API layer
+1. answer generation
+2. API layer
