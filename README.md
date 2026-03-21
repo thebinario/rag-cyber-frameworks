@@ -193,7 +193,8 @@ Optional environment variables:
 set OLLAMA_BASE_URL=http://127.0.0.1:11434
 set OLLAMA_EMBED_MODEL=nomic-embed-text
 set OLLAMA_GENERATE_MODEL=qwen3.5:4b
-set OLLAMA_TIMEOUT_SECONDS=300
+set OLLAMA_EMBED_TIMEOUT_SECONDS=30
+set OLLAMA_GENERATE_TIMEOUT_SECONDS=300
 ```
 
 Run:
@@ -265,11 +266,15 @@ This step:
 
 - generates an embedding for the query with Ollama
 - consults the persistent Chroma index
-- expands the query with lightweight technique aliases
-- reranks results with simple lexical signals
-- can pull adjacent chunks from the same document when they improve procedural context
+- uses fast retrieval by default for lower latency
 - returns structured retrieval results with metadata and distance
 - optionally formats the retrieved chunks into a single text context block
+
+For harder queries, use expanded retrieval:
+
+```bash
+python scripts/retrieve_context.py "how to use gobuster looking for subdomain" --top-k 3 --retrieval-mode expanded
+```
 
 ## Ask the full RAG pipeline
 
@@ -300,6 +305,20 @@ This step:
 - prints the answer and the retrieved sources
 
 The generator is instructed to answer only from the retrieved context. When a question mentions a specific tool that is not present in the corpus, it should say that clearly and only provide technique-level guidance supported by the retrieved context.
+
+The default `ask_rag.py` path is optimized for latency:
+
+- fast retrieval mode by default
+- streaming generation by default
+- smaller generation context by default
+
+For harder retrieval problems, switch to expanded mode:
+
+```bash
+python scripts/ask_rag.py "How to use gobuster looking for subdomain?" --top-k 3 --retrieval-mode expanded
+```
+
+RAG will always be slower than asking the local model directly because it first embeds the query, searches the vector index, and builds a grounded prompt with retrieved evidence before generation.
 
 ## Commit guidance
 

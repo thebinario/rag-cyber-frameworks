@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from urllib import error, request
+from typing import Iterator
 
 
 class OllamaClient:
@@ -71,18 +72,69 @@ class OllamaEmbeddingClient(OllamaClient):
 
 
 class OllamaGenerationClient(OllamaClient):
-    def generate(self, prompt: str) -> str:
-        payload = self._post_json(
-            "/api/generate",
-            {
-                "model": self.model,
-                "prompt": prompt,
-                "stream": False,
-            },
-        )
+    """Ollama text generation client using the /api/chat endpoint.
 
-        response_text = payload.get("response")
-        if isinstance(response_text, str) and response_text.strip():
-            return response_text.strip()
+    Uses /api/chat instead of /api/generate to support the ``think`` flag
+    which disables the reasoning/thinking mode in models like qwen3.5.
+    """
+
+    def generate(self, prompt: str, options: dict[str, object] | None = None) -> str:
+        request_body: dict[str, object] = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": prompt}],
+            "stream": False,
+            "think": False,
+        }
+        if options:
+            request_body["options"] = options
+        payload = self._post_json("/api/chat", request_body)
+
+        message = payload.get("message")
+        if isinstance(message, dict):
+            content = message.get("content")
+            if isinstance(content, str) and content.strip():
+                return content.strip()
 
         raise RuntimeError("Ollama response did not contain a usable text generation")
+
+    def generate_stream(self, prompt: str, options: dict[str, object] | None = None) -> Iterator[str]:
+        request_body: dict[str, object] = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": prompt}],
+            "stream": True,
+            "think": False,
+        }
+        if options:
+            request_body["options"] = options
+        raw_payload = json.dumps(request_body).encode("utf-8")
+        http_request = request.Request(
+            f"{self.base_url}/api/chat",
+            data=raw_payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+
+        try:
+            with request.urlopen(http_request, timeout=self.timeout_seconds) as response:
+                for raw_line in response:
+                    line = raw_line.decode("utf-8").strip()
+                    if not line:
+                        continue
+                    try:
+                        payload = json.loads(line)
+                    except json.JSONDecodeError as exc:
+                        raise RuntimeError("Ollama returned invalid JSON in streaming response") from exc
+
+                    message = payload.get("message")
+                    if isinstance(message, dict):
+                        content = message.get("content")
+                        if isinstance(content, str) and content:
+                            yield content
+
+                    if payload.get("done") is True:
+                        return
+        except error.HTTPError as exc:
+            body = exc.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"Ollama HTTP {exc.code}: {body}") from exc
+        except error.URLError as exc:
+            raise RuntimeError(f"Could not connect to Ollama at {self.base_url}: {exc.reason}") from exc

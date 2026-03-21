@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import os
+import re
+from collections.abc import Iterator
 
 from app.ingest.ollama_client import OllamaGenerationClient
 
@@ -12,21 +14,30 @@ INSUFFICIENT_EVIDENCE_MESSAGE = (
     "I do not have enough evidence in the retrieved context to answer that safely."
 )
 
+DEFAULT_GENERATION_OPTIONS: dict[str, object] = {
+    "num_predict": 512,
+    "temperature": 0.3,
+}
+
+_THINK_PATTERN = re.compile(r"<think>.*?</think>", re.DOTALL)
+
+
+def strip_think_tags(text: str) -> str:
+    """Remove <think>...</think> blocks from model output (safety net)."""
+    return _THINK_PATTERN.sub("", text).strip()
+
 
 def build_grounded_prompt(question: str, context: str) -> str:
     normalized_question = question.strip()
     normalized_context = context.strip()
     return "\n\n".join(
         [
-            "You are a cybersecurity assistant answering strictly from the provided context.",
-            "Rules:",
-            "1. Answer only with information supported by the context.",
-            "2. Do not use outside knowledge.",
-            f"3. If the context is insufficient, reply exactly with: {INSUFFICIENT_EVIDENCE_MESSAGE}",
-            "4. If the question names a specific tool that does not appear in the context, say that clearly.",
-            "5. If the context supports the technique but not the named tool, provide only technique-level guidance grounded in the context.",
-            "6. Do not invent commands, flags, or procedures that are not explicitly present in the context.",
-            "7. Keep the answer concise and factual.",
+            "Answer as a cybersecurity assistant using only the provided context.",
+            f"If the context is insufficient, reply exactly with: {INSUFFICIENT_EVIDENCE_MESSAGE}",
+            "If a named tool does not appear in the context, say that clearly.",
+            "If the context supports only the technique, answer only at technique level.",
+            "Do not invent commands, flags, or procedures.",
+            "Keep the answer concise and factual.",
             f"Question:\n{normalized_question}",
             f"Context:\n{normalized_context}",
             "Answer:",
@@ -39,6 +50,7 @@ def generate_grounded_answer(
     context: str,
     base_url: str | None = None,
     model: str | None = None,
+    options: dict[str, object] | None = None,
 ) -> str:
     if not question.strip():
         raise ValueError("question must not be empty")
@@ -48,8 +60,12 @@ def generate_grounded_answer(
     resolved_base_url = base_url or os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_BASE_URL)
     resolved_model = model or os.getenv("OLLAMA_GENERATE_MODEL", DEFAULT_OLLAMA_GENERATE_MODEL)
     resolved_timeout = int(
-        os.getenv("OLLAMA_TIMEOUT_SECONDS", str(DEFAULT_OLLAMA_TIMEOUT_SECONDS))
+        os.getenv(
+            "OLLAMA_GENERATE_TIMEOUT_SECONDS",
+            os.getenv("OLLAMA_TIMEOUT_SECONDS", str(DEFAULT_OLLAMA_TIMEOUT_SECONDS)),
+        )
     )
+    resolved_options = {**DEFAULT_GENERATION_OPTIONS, **(options or {})}
 
     client = OllamaGenerationClient(
         base_url=resolved_base_url,
@@ -58,4 +74,37 @@ def generate_grounded_answer(
     )
     client.is_available()
     prompt = build_grounded_prompt(question, context)
-    return client.generate(prompt)
+    return strip_think_tags(client.generate(prompt, options=resolved_options))
+
+
+def generate_grounded_answer_stream(
+    question: str,
+    context: str,
+    base_url: str | None = None,
+    model: str | None = None,
+    options: dict[str, object] | None = None,
+) -> Iterator[str]:
+    if not question.strip():
+        raise ValueError("question must not be empty")
+    if not context.strip():
+        yield INSUFFICIENT_EVIDENCE_MESSAGE
+        return
+
+    resolved_base_url = base_url or os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_BASE_URL)
+    resolved_model = model or os.getenv("OLLAMA_GENERATE_MODEL", DEFAULT_OLLAMA_GENERATE_MODEL)
+    resolved_timeout = int(
+        os.getenv(
+            "OLLAMA_GENERATE_TIMEOUT_SECONDS",
+            os.getenv("OLLAMA_TIMEOUT_SECONDS", str(DEFAULT_OLLAMA_TIMEOUT_SECONDS)),
+        )
+    )
+    resolved_options = {**DEFAULT_GENERATION_OPTIONS, **(options or {})}
+
+    client = OllamaGenerationClient(
+        base_url=resolved_base_url,
+        model=resolved_model,
+        timeout_seconds=resolved_timeout,
+    )
+    client.is_available()
+    prompt = build_grounded_prompt(question, context)
+    yield from client.generate_stream(prompt, options=resolved_options)

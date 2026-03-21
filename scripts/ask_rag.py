@@ -13,7 +13,12 @@ from app.runtime import ensure_supported_python
 
 ensure_supported_python()
 
-from app.rag import run_rag_pipeline
+from app.rag import (
+    DEFAULT_RETRIEVAL_MODE,
+    EXPANDED_RETRIEVAL_MODE,
+    run_rag_pipeline,
+    stream_rag_answer,
+)
 from app.rag.vector_store import DEFAULT_SEARCH_TOP_K
 
 
@@ -34,38 +39,69 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Print the formatted retrieved context used to ground the answer.",
     )
+    parser.add_argument(
+        "--no-stream",
+        action="store_true",
+        help="Disable streaming and wait for the full answer before printing.",
+    )
+    parser.add_argument(
+        "--retrieval-mode",
+        choices=[DEFAULT_RETRIEVAL_MODE, EXPANDED_RETRIEVAL_MODE],
+        default=DEFAULT_RETRIEVAL_MODE,
+        help=f"Retrieval mode to use. Default: {DEFAULT_RETRIEVAL_MODE}.",
+    )
     return parser
 
 
 def main() -> None:
     args = build_parser().parse_args()
-    rag_answer = run_rag_pipeline(
-        question=args.question,
-        top_k=args.top_k,
-        persist_directory=PERSIST_DIRECTORY,
-    )
-
-    print(f"Question: {rag_answer.question}")
+    print(f"Question: {args.question}")
     print()
     print("Answer:")
-    print(rag_answer.answer)
-    print()
+
+    if args.no_stream:
+        rag_answer = run_rag_pipeline(
+            question=args.question,
+            top_k=args.top_k,
+            persist_directory=PERSIST_DIRECTORY,
+            retrieval_mode=args.retrieval_mode,
+        )
+        print(rag_answer.answer)
+        sources = rag_answer.sources
+        context = rag_answer.context
+    else:
+        sources, context, answer_stream = stream_rag_answer(
+            question=args.question,
+            top_k=args.top_k,
+            persist_directory=PERSIST_DIRECTORY,
+            retrieval_mode=args.retrieval_mode,
+        )
+        answer_parts: list[str] = []
+        for chunk in answer_stream:
+            answer_parts.append(chunk)
+            print(chunk, end="", flush=True)
+        print()
+        print()
+        rag_answer = None
+
     print("Sources:")
 
-    if not rag_answer.sources:
+    final_sources = sources if args.no_stream else sources
+    if not final_sources:
         print("No sources were retrieved.")
     else:
-        for index, source in enumerate(rag_answer.sources, start=1):
+        for index, source in enumerate(final_sources, start=1):
             print(
                 f"[{index}] chunk_id={source.chunk_id} title={source.title} "
                 f"framework={source.framework} distance={source.distance}"
             )
 
     if args.show_context:
+        final_context = context if args.no_stream else context
         print()
         print("Context:")
         print()
-        print(rag_answer.context)
+        print(final_context)
 
 
 if __name__ == "__main__":

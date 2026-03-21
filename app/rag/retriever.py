@@ -20,6 +20,9 @@ DEFAULT_CHUNKS_PATH = REPO_ROOT / "data" / "processed" / "chunks" / "chunks.json
 DEFAULT_INTERNAL_TOP_K = 8
 MAX_EXPANDED_QUERIES = 3
 WORD_PATTERN = re.compile(r"[a-z0-9]+")
+DEFAULT_RETRIEVAL_MODE = "fast"
+EXPANDED_RETRIEVAL_MODE = "expanded"
+VALID_RETRIEVAL_MODES = {DEFAULT_RETRIEVAL_MODE, EXPANDED_RETRIEVAL_MODE}
 
 
 @dataclass(frozen=True)
@@ -174,10 +177,19 @@ def retrieve_chunks(
     base_url: str | None = None,
     model: str | None = None,
     chunks_path: str | Path = DEFAULT_CHUNKS_PATH,
+    retrieval_mode: str = DEFAULT_RETRIEVAL_MODE,
 ) -> list[RetrievalResult]:
+    if retrieval_mode not in VALID_RETRIEVAL_MODES:
+        supported_modes = ", ".join(sorted(VALID_RETRIEVAL_MODES))
+        raise ValueError(f"retrieval_mode must be one of: {supported_modes}")
+
     query_rewrite = rewrite_query(query)
-    query_candidates = _build_query_candidates(query_rewrite)
-    internal_top_k = max(DEFAULT_INTERNAL_TOP_K, top_k * 4)
+    if retrieval_mode == EXPANDED_RETRIEVAL_MODE:
+        query_candidates = _build_query_candidates(query_rewrite)
+        internal_top_k = max(DEFAULT_INTERNAL_TOP_K, top_k * 4)
+    else:
+        query_candidates = [query_rewrite.normalized_query]
+        internal_top_k = top_k
 
     merged_results = _merge_raw_results(
         query_candidates=query_candidates,
@@ -187,8 +199,10 @@ def retrieve_chunks(
         model=model,
         internal_top_k=internal_top_k,
     )
-    chunk_map = _load_chunk_map(chunks_path)
-    expanded_results = _expand_neighbor_results(merged_results, chunk_map)
+    expanded_results = merged_results
+    if retrieval_mode == EXPANDED_RETRIEVAL_MODE:
+        chunk_map = _load_chunk_map(chunks_path)
+        expanded_results = _expand_neighbor_results(merged_results, chunk_map)
 
     retrieval_results: list[RetrievalResult] = []
     for result in expanded_results.values():

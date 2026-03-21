@@ -13,7 +13,7 @@ from app.runtime import ensure_supported_python
 
 ensure_supported_python()
 
-from app.rag import retrieve_chunks
+from app.rag import DEFAULT_RETRIEVAL_MODE, EXPANDED_RETRIEVAL_MODE, retrieve_chunks
 from app.rag.vector_store import (
     DEFAULT_RESULT_TEXT_LENGTH,
     DEFAULT_SEARCH_TOP_K,
@@ -32,6 +32,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=DEFAULT_SEARCH_TOP_K,
         help=f"Number of top results to return. Default: {DEFAULT_SEARCH_TOP_K}.",
     )
+    parser.add_argument(
+        "--retrieval-mode",
+        choices=[DEFAULT_RETRIEVAL_MODE, EXPANDED_RETRIEVAL_MODE],
+        default=DEFAULT_RETRIEVAL_MODE,
+        help=f"Retrieval mode to use. Default: {DEFAULT_RETRIEVAL_MODE}.",
+    )
     return parser
 
 
@@ -48,6 +54,7 @@ def main() -> None:
         query=args.query,
         top_k=args.top_k,
         persist_directory=PERSIST_DIRECTORY,
+        retrieval_mode=args.retrieval_mode,
     )
 
     print(f"Query: {args.query}")

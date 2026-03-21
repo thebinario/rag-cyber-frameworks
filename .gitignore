@@ -4,3 +4,4 @@ __pycache__/
 .venv/
 .tmp/
 data/vectorstore/chroma/
+agents.md

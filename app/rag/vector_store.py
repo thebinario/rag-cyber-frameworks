@@ -20,6 +20,7 @@ DEFAULT_CHROMA_COLLECTION_NAME = "chunk_embeddings"
 DEFAULT_CHROMA_PERSIST_DIRECTORY = Path("data") / "vectorstore" / "chroma"
 DEFAULT_SEARCH_TOP_K = 5
 DEFAULT_RESULT_TEXT_LENGTH = 300
+DEFAULT_OLLAMA_EMBED_TIMEOUT_SECONDS = 30
 
 
 def _require_chromadb() -> Any:
@@ -130,7 +131,12 @@ def search_chunks(
 
     resolved_base_url = base_url or os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
     resolved_model = model or os.getenv("OLLAMA_EMBED_MODEL", "nomic-embed-text")
-    resolved_timeout = int(os.getenv("OLLAMA_TIMEOUT_SECONDS", "10"))
+    resolved_timeout = int(
+        os.getenv(
+            "OLLAMA_EMBED_TIMEOUT_SECONDS",
+            os.getenv("OLLAMA_TIMEOUT_SECONDS", str(DEFAULT_OLLAMA_EMBED_TIMEOUT_SECONDS)),
+        )
+    )
 
     client = OllamaEmbeddingClient(
         base_url=resolved_base_url,
