@@ -9,6 +9,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from app.runtime import ensure_supported_python
+
+ensure_supported_python()
+
 from app.rag import format_retrieval_context, retrieve_chunks
 from app.rag.vector_store import DEFAULT_SEARCH_TOP_K
 

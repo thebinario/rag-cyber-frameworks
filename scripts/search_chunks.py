@@ -9,6 +9,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from app.runtime import ensure_supported_python
+
+ensure_supported_python()
+
 from app.rag import retrieve_chunks
 from app.rag.vector_store import (
     DEFAULT_RESULT_TEXT_LENGTH,
@@ -60,10 +64,6 @@ def main() -> None:
         print(f"title={result.title} framework={result.framework} document_id={result.document_id}")
         print(f"source_type={result.source_type} source_path={result.source_path} chunk_index={result.chunk_index}")
         print(f"text={_truncate_text(result.text)}")
-
-
-if __name__ == "__main__":
-    main()
 
 
 if __name__ == "__main__":

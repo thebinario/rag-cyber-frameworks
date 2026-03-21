@@ -6,9 +6,17 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
+import sys
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from app.runtime import ensure_supported_python
+
+ensure_supported_python()
+
 RAW_DATA_DIR = REPO_ROOT / "data" / "raw"
 MANIFEST_PATH = REPO_ROOT / "data" / "processed" / "manifests" / "documents_manifest.json"
 

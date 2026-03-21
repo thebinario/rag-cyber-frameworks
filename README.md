@@ -2,6 +2,22 @@
 
 This repository organizes reference materials from cybersecurity frameworks and methodologies that will be used in future retrieval and question-answering stages.
 
+## Python compatibility
+
+This repository currently requires Python `>=3.12,<3.14`.
+
+- Preferred version: `3.13`
+- Not supported for the full stack: `3.14+`
+
+The current Chroma-based vector store stack is not compatible with Python 3.14, so create the project virtual environment with Python 3.13.
+
+Suggested setup on Windows:
+
+```bash
+py -3.13 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
 ## Data organization
 
 The project separates source documents from processed artifacts:
