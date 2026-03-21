@@ -13,8 +13,11 @@ RAW_DATA_DIR = REPO_ROOT / "data" / "raw"
 MANIFEST_PATH = REPO_ROOT / "data" / "processed" / "manifests" / "documents_manifest.json"
 
 SUPPORTED_EXTENSIONS = {
+    ".htm": "html",
+    ".html": "html",
     ".md": "markdown",
     ".pdf": "pdf",
+    ".txt": "text",
 }
 
 FRAMEWORK_ORIGINS = {
