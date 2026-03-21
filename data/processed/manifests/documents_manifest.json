@@ -1,0 +1,116 @@
+{
+  "generated_at": "2026-03-21T16:25:02.824123+00:00",
+  "document_count": 11,
+  "documents": [
+    {
+      "id": "nist-nist-cswp-29",
+      "title": "NIST.CSWP.29",
+      "framework": "nist",
+      "source_type": "pdf",
+      "language": "en",
+      "path": "data/raw/nist/NIST.CSWP.29.pdf",
+      "origin": "https://csrc.nist.gov/publications/",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "nist-nistspecialpublication800-115",
+      "title": "nistspecialpublication800-115",
+      "framework": "nist",
+      "source_type": "pdf",
+      "language": "en",
+      "path": "data/raw/nist/nistspecialpublication800-115.pdf",
+      "origin": "https://csrc.nist.gov/publications/",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "osstmm-osstmm-3",
+      "title": "OSSTMM.3",
+      "framework": "osstmm",
+      "source_type": "pdf",
+      "language": "en",
+      "path": "data/raw/osstmm/OSSTMM.3.pdf",
+      "origin": "https://www.isecom.org/OSSTMM.3.pdf",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "ptes-exploitation",
+      "title": "Exploitation",
+      "framework": "ptes",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/ptes/Exploitation.md",
+      "origin": "https://www.pentest-standard.org/",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "ptes-intelligence-gathering",
+      "title": "Intelligence Gathering",
+      "framework": "ptes",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/ptes/Intelligence Gathering.md",
+      "origin": "https://www.pentest-standard.org/",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "ptes-post-exploitation",
+      "title": "Post Exploitation",
+      "framework": "ptes",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/ptes/Post Exploitation.md",
+      "origin": "https://www.pentest-standard.org/",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "ptes-pre-engagement",
+      "title": "Pre-engagement",
+      "framework": "ptes",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/ptes/Pre-engagement.md",
+      "origin": "https://www.pentest-standard.org/",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "ptes-ptes-technical-guidelines",
+      "title": "PTES Technical Guidelines",
+      "framework": "ptes",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/ptes/PTES Technical Guidelines.md",
+      "origin": "https://www.pentest-standard.org/",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "ptes-reporting",
+      "title": "Reporting",
+      "framework": "ptes",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/ptes/Reporting.md",
+      "origin": "https://www.pentest-standard.org/",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "ptes-threat-modeling",
+      "title": "Threat Modeling",
+      "framework": "ptes",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/ptes/Threat Modeling.md",
+      "origin": "https://www.pentest-standard.org/",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "ptes-vulnerability-analysis",
+      "title": "Vulnerability Analysis",
+      "framework": "ptes",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/ptes/Vulnerability Analysis.md",
+      "origin": "https://www.pentest-standard.org/",
+      "ingestion_status": "discovered"
+    }
+  ]
+}
