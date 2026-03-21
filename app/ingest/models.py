@@ -58,3 +58,22 @@ class DocumentChunk:
 
     def to_dict(self) -> dict[str, object]:
         return asdict(self)
+
+
+@dataclass(frozen=True)
+class ChunkEmbeddingRecord:
+    chunk_id: str
+    document_id: str
+    title: str
+    framework: str
+    source_type: str
+    source_path: str
+    chunk_index: int
+    char_count: int
+    text: str
+    embedding_model: str
+    embedding: list[float] | None
+    error: str | None
+
+    def to_dict(self) -> dict[str, object]:
+        return asdict(self)

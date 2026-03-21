@@ -15,6 +15,7 @@ data/
   processed/
     chunks/
     documents/
+    embeddings/
     manifests/
 ```
 
@@ -22,6 +23,7 @@ data/
 - `data/processed/manifests/` stores generated catalog artifacts derived from the raw corpus.
 - `data/processed/documents/` stores one processed JSON file per source document.
 - `data/processed/chunks/` stores chunked representations derived from `clean_text`.
+- `data/processed/embeddings/` stores chunk embeddings generated locally with Ollama.
 
 ## Current sources
 
@@ -35,12 +37,13 @@ These files are treated as the canonical raw inputs for the ingestion pipeline.
 
 ## Objective of this stage
 
-The project currently has four completed ingestion stages:
+The project currently has five completed ingestion stages:
 
 1. inventory and manifest generation for raw files
 2. source loading and conversion into processed document JSON files
 3. conservative text cleaning and normalization
 4. chunk generation with overlap from cleaned text
+5. local embedding generation from chunks with Ollama
 
 The generated manifest is written to:
 
@@ -54,6 +57,10 @@ The generated chunks are written to:
 
 `data/processed/chunks/chunks.jsonl`
 
+The generated embeddings are written to:
+
+`data/processed/embeddings/chunk_embeddings.jsonl`
+
 ## Pipeline status
 
 Implemented in this stage:
@@ -66,10 +73,10 @@ Implemented in this stage:
 - processed document JSON generation
 - conservative text cleaning with `clean_text`
 - chunk generation using `clean_text`
+- local embedding generation with Ollama
 
 Not implemented yet:
 
-- embeddings
 - vector indexing
 - retrieval
 - answer generation
@@ -139,14 +146,48 @@ Each chunk record includes:
 - `char_count`
 - `text`
 
+## Build embeddings with Ollama
+
+Start the local Ollama server:
+
+```bash
+ollama serve
+```
+
+Pull the default embedding model:
+
+```bash
+ollama pull nomic-embed-text
+```
+
+Optional environment variables:
+
+```bash
+set OLLAMA_BASE_URL=http://127.0.0.1:11434
+set OLLAMA_EMBED_MODEL=nomic-embed-text
+```
+
+Run:
+
+```bash
+python scripts/build_embeddings.py
+```
+
+This reads `data/processed/chunks/chunks.jsonl`, requests embeddings from the local Ollama API, and writes the results to `data/processed/embeddings/chunk_embeddings.jsonl`.
+
+Each embedding record preserves the chunk metadata and adds:
+
+- `embedding_model`
+- `embedding`
+- `error`
+
 ## Next steps
 
-This stage intentionally does not implement embeddings, retrieval, vector storage, or answer generation. Chunking is character-based, conservative, and does not mix documents.
+This stage intentionally does not implement vector storage, retrieval, answer generation, or an API. Embeddings are generated locally and saved as JSONL only.
 
 ## Next steps
 
 Planned next pipeline stages:
 
-1. embedding creation from generated chunks
-2. vector database indexing
-3. retrieval and response orchestration
+1. vector database indexing
+2. retrieval and response orchestration
