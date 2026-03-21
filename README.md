@@ -192,8 +192,8 @@ Optional environment variables:
 ```bash
 set OLLAMA_BASE_URL=http://127.0.0.1:11434
 set OLLAMA_EMBED_MODEL=nomic-embed-text
-set OLLAMA_GENERATE_MODEL=llama3.2
-set OLLAMA_TIMEOUT_SECONDS=10
+set OLLAMA_GENERATE_MODEL=qwen3.5:4b
+set OLLAMA_TIMEOUT_SECONDS=180
 ```
 
 Run:
@@ -273,7 +273,7 @@ This step:
 Pull a local generation model:
 
 ```bash
-ollama pull llama3.2
+ollama pull qwen3.5:4b
 ```
 
 Run the full retrieval + generation flow:
@@ -297,6 +297,23 @@ This step:
 - prints the answer and the retrieved sources
 
 The generator is instructed to answer only from the retrieved context. When there is not enough evidence, it should return a clear insufficiency message instead of inventing details.
+
+## Commit guidance
+
+Recommended to commit:
+
+- source code under `app/` and `scripts/`
+- `README.md`
+- `requirements.txt`
+- `pyproject.toml`
+- `.python-version`
+- deterministic processed JSON artifacts if you want reproducible snapshots of each stage
+
+Recommended to keep out of Git:
+
+- `.venv/`
+- temporary local folders such as `.tmp/`
+- `data/vectorstore/chroma/` because the Chroma database is a local binary index that can be rebuilt from `data/processed/embeddings/chunk_embeddings.jsonl`
 
 ## Next steps
 
