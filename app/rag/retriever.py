@@ -1,14 +1,25 @@
 from __future__ import annotations
 
+import json
+import re
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
+from app.ingest.models import DocumentChunk
+
+from .query_rewriter import QueryRewrite, rewrite_query
 from .vector_store import (
     DEFAULT_CHROMA_COLLECTION_NAME,
     DEFAULT_CHROMA_PERSIST_DIRECTORY,
     DEFAULT_SEARCH_TOP_K,
     search_chunks,
 )
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_CHUNKS_PATH = REPO_ROOT / "data" / "processed" / "chunks" / "chunks.jsonl"
+DEFAULT_INTERNAL_TOP_K = 8
+MAX_EXPANDED_QUERIES = 3
+WORD_PATTERN = re.compile(r"[a-z0-9]+")
 
 
 @dataclass(frozen=True)
@@ -22,9 +33,137 @@ class RetrievalResult:
     chunk_index: int
     text: str
     distance: float
+    retrieval_score: float
+    matched_terms: list[str]
 
     def to_dict(self) -> dict[str, object]:
         return asdict(self)
+
+
+def _tokenize(text: str) -> set[str]:
+    return set(WORD_PATTERN.findall(text.lower()))
+
+
+def _load_chunk_map(chunks_path: str | Path = DEFAULT_CHUNKS_PATH) -> dict[str, DocumentChunk]:
+    path = Path(chunks_path)
+    chunk_map: dict[str, DocumentChunk] = {}
+
+    with path.open("r", encoding="utf-8") as file_handle:
+        for line in file_handle:
+            if not line.strip():
+                continue
+            payload = json.loads(line)
+            chunk = DocumentChunk(**payload)
+            chunk_map[chunk.chunk_id] = chunk
+
+    return chunk_map
+
+
+def _build_query_candidates(query_rewrite: QueryRewrite) -> list[str]:
+    return [query_rewrite.normalized_query] + query_rewrite.expanded_queries[:MAX_EXPANDED_QUERIES]
+
+
+def _merge_raw_results(
+    query_candidates: list[str],
+    persist_directory: str | Path,
+    collection_name: str,
+    base_url: str | None,
+    model: str | None,
+    internal_top_k: int,
+) -> dict[str, dict[str, object]]:
+    merged_results: dict[str, dict[str, object]] = {}
+
+    for candidate in query_candidates:
+        raw_results = search_chunks(
+            query=candidate,
+            top_k=internal_top_k,
+            persist_directory=persist_directory,
+            collection_name=collection_name,
+            base_url=base_url,
+            model=model,
+        )
+        for result in raw_results:
+            chunk_id = str(result["chunk_id"])
+            previous = merged_results.get(chunk_id)
+            if previous is None or float(result["distance"]) < float(previous["distance"]):
+                merged_results[chunk_id] = result
+
+    return merged_results
+
+
+def _expand_neighbor_results(
+    merged_results: dict[str, dict[str, object]],
+    chunk_map: dict[str, DocumentChunk],
+) -> dict[str, dict[str, object]]:
+    expanded_results = dict(merged_results)
+
+    for result in list(merged_results.values()):
+        metadata = result["metadata"]
+        document_id = str(metadata["document_id"])
+        chunk_index = int(metadata["chunk_index"])
+
+        for neighbor_index in (chunk_index - 1, chunk_index + 1):
+            if neighbor_index < 0:
+                continue
+            neighbor_chunk_id = f"{document_id}-chunk-{neighbor_index:04d}"
+            if neighbor_chunk_id in expanded_results:
+                continue
+            neighbor = chunk_map.get(neighbor_chunk_id)
+            if neighbor is None:
+                continue
+
+            expanded_results[neighbor_chunk_id] = {
+                "chunk_id": neighbor.chunk_id,
+                "distance": float(result["distance"]) + 0.015,
+                "text": neighbor.text,
+                "metadata": {
+                    "document_id": neighbor.document_id,
+                    "title": neighbor.title,
+                    "framework": neighbor.framework,
+                    "source_type": neighbor.source_type,
+                    "source_path": neighbor.source_path,
+                    "chunk_index": neighbor.chunk_index,
+                },
+            }
+
+    return expanded_results
+
+
+def _score_result(
+    result: dict[str, object],
+    query_rewrite: QueryRewrite,
+) -> tuple[float, list[str]]:
+    result_text = str(result["text"])
+    metadata = result["metadata"]
+    haystack_terms = _tokenize(
+        " ".join(
+            [
+                result_text,
+                str(metadata["title"]),
+                str(metadata["framework"]),
+                str(metadata["source_path"]),
+            ]
+        )
+    )
+
+    matched_terms = sorted(
+        {
+            term
+            for term in query_rewrite.query_terms
+            if len(term) > 2 and term in haystack_terms
+        }
+    )
+
+    lexical_score = len(matched_terms) * 0.08
+    if "subdomain" in haystack_terms and "dns" in haystack_terms:
+        lexical_score += 0.08
+    if "enumeration" in haystack_terms or "discover" in haystack_terms:
+        lexical_score += 0.04
+    if query_rewrite.tool_terms and any(tool in haystack_terms for tool in query_rewrite.tool_terms):
+        lexical_score += 0.08
+
+    retrieval_score = lexical_score - float(result["distance"])
+    return retrieval_score, matched_terms
 
 
 def retrieve_chunks(
@@ -34,19 +173,27 @@ def retrieve_chunks(
     collection_name: str = DEFAULT_CHROMA_COLLECTION_NAME,
     base_url: str | None = None,
     model: str | None = None,
+    chunks_path: str | Path = DEFAULT_CHUNKS_PATH,
 ) -> list[RetrievalResult]:
-    raw_results = search_chunks(
-        query=query,
-        top_k=top_k,
+    query_rewrite = rewrite_query(query)
+    query_candidates = _build_query_candidates(query_rewrite)
+    internal_top_k = max(DEFAULT_INTERNAL_TOP_K, top_k * 4)
+
+    merged_results = _merge_raw_results(
+        query_candidates=query_candidates,
         persist_directory=persist_directory,
         collection_name=collection_name,
         base_url=base_url,
         model=model,
+        internal_top_k=internal_top_k,
     )
+    chunk_map = _load_chunk_map(chunks_path)
+    expanded_results = _expand_neighbor_results(merged_results, chunk_map)
 
     retrieval_results: list[RetrievalResult] = []
-    for result in raw_results:
+    for result in expanded_results.values():
         metadata = result["metadata"]
+        retrieval_score, matched_terms = _score_result(result, query_rewrite)
         retrieval_results.append(
             RetrievalResult(
                 chunk_id=result["chunk_id"],
@@ -58,10 +205,20 @@ def retrieve_chunks(
                 chunk_index=int(metadata["chunk_index"]),
                 text=str(result["text"]),
                 distance=float(result["distance"]),
+                retrieval_score=retrieval_score,
+                matched_terms=matched_terms,
             )
         )
 
-    return retrieval_results
+    retrieval_results.sort(
+        key=lambda result: (
+            -len(result.matched_terms),
+            -result.retrieval_score,
+            result.distance,
+            result.chunk_index,
+        )
+    )
+    return retrieval_results[:top_k]
 
 
 def format_retrieval_context(results: list[RetrievalResult]) -> str:
@@ -79,6 +236,8 @@ def format_retrieval_context(results: list[RetrievalResult]) -> str:
                 f"source_path: {result.source_path}",
                 f"chunk_index: {result.chunk_index}",
                 f"distance: {result.distance}",
+                f"retrieval_score: {result.retrieval_score}",
+                f"matched_terms: {', '.join(result.matched_terms) if result.matched_terms else 'none'}",
                 "text:",
                 result.text,
             ]

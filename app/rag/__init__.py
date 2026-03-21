@@ -11,6 +11,7 @@ from .generator import (
     generate_grounded_answer,
 )
 from .pipeline import RagAnswer, run_rag_pipeline
+from .query_rewriter import QueryRewrite, rewrite_query
 from .retriever import RetrievalResult, format_retrieval_context, retrieve_chunks
 
 __all__ = [
@@ -22,8 +23,10 @@ __all__ = [
     "generate_grounded_answer",
     "INSUFFICIENT_EVIDENCE_MESSAGE",
     "load_vector_collection",
+    "QueryRewrite",
     "RagAnswer",
     "RetrievalResult",
+    "rewrite_query",
     "retrieve_chunks",
     "run_rag_pipeline",
     "search_chunks",

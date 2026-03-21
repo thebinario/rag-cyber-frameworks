@@ -7,7 +7,7 @@ from app.ingest.ollama_client import OllamaGenerationClient
 
 DEFAULT_OLLAMA_BASE_URL = "http://127.0.0.1:11434"
 DEFAULT_OLLAMA_GENERATE_MODEL = "qwen3.5:4b"
-DEFAULT_OLLAMA_TIMEOUT_SECONDS = 180
+DEFAULT_OLLAMA_TIMEOUT_SECONDS = 300
 INSUFFICIENT_EVIDENCE_MESSAGE = (
     "I do not have enough evidence in the retrieved context to answer that safely."
 )
@@ -23,7 +23,10 @@ def build_grounded_prompt(question: str, context: str) -> str:
             "1. Answer only with information supported by the context.",
             "2. Do not use outside knowledge.",
             f"3. If the context is insufficient, reply exactly with: {INSUFFICIENT_EVIDENCE_MESSAGE}",
-            "4. Keep the answer concise and factual.",
+            "4. If the question names a specific tool that does not appear in the context, say that clearly.",
+            "5. If the context supports the technique but not the named tool, provide only technique-level guidance grounded in the context.",
+            "6. Do not invent commands, flags, or procedures that are not explicitly present in the context.",
+            "7. Keep the answer concise and factual.",
             f"Question:\n{normalized_question}",
             f"Context:\n{normalized_context}",
             "Answer:",

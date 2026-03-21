@@ -193,7 +193,7 @@ Optional environment variables:
 set OLLAMA_BASE_URL=http://127.0.0.1:11434
 set OLLAMA_EMBED_MODEL=nomic-embed-text
 set OLLAMA_GENERATE_MODEL=qwen3.5:4b
-set OLLAMA_TIMEOUT_SECONDS=180
+set OLLAMA_TIMEOUT_SECONDS=300
 ```
 
 Run:
@@ -265,6 +265,9 @@ This step:
 
 - generates an embedding for the query with Ollama
 - consults the persistent Chroma index
+- expands the query with lightweight technique aliases
+- reranks results with simple lexical signals
+- can pull adjacent chunks from the same document when they improve procedural context
 - returns structured retrieval results with metadata and distance
 - optionally formats the retrieved chunks into a single text context block
 
@@ -296,7 +299,7 @@ This step:
 - generates an answer with Ollama
 - prints the answer and the retrieved sources
 
-The generator is instructed to answer only from the retrieved context. When there is not enough evidence, it should return a clear insufficiency message instead of inventing details.
+The generator is instructed to answer only from the retrieved context. When a question mentions a specific tool that is not present in the corpus, it should say that clearly and only provide technique-level guidance supported by the retrieved context.
 
 ## Commit guidance
 
