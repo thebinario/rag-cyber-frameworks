@@ -11,22 +11,15 @@ DEFAULT_CHUNK_SIZE = 1200
 DEFAULT_MIN_CHUNK_SIZE = 200
 DEFAULT_MAX_CHUNK_SIZE = 2000
 
-# Heading pattern: wiki-style (= Title =, == Sub ==, etc.) or markdown (# Title, ## Sub)
 _HEADING_PATTERN = re.compile(
     r"^(?:={1,6})\s+.+?\s+(?:={1,6})$|^#{1,6}\s+.+$",
     re.MULTILINE,
 )
 
-# Sentence boundary for splitting long paragraphs
 _SENTENCE_BOUNDARY = re.compile(r"(?<=[.!?])\s+(?=[A-Z])")
 
 
 def _split_into_sections(text: str) -> list[tuple[str, str]]:
-    """Split text into (heading, body) pairs based on heading markers.
-
-    Returns a list of tuples where heading may be empty for the preamble
-    (text before the first heading).
-    """
     matches = list(_HEADING_PATTERN.finditer(text))
 
     if not matches:
@@ -34,7 +27,6 @@ def _split_into_sections(text: str) -> list[tuple[str, str]]:
 
     sections: list[tuple[str, str]] = []
 
-    # Preamble before first heading
     preamble = text[: matches[0].start()].strip()
     if preamble:
         sections.append(("", preamble))
@@ -50,20 +42,13 @@ def _split_into_sections(text: str) -> list[tuple[str, str]]:
 
 
 def _split_paragraphs(text: str) -> list[str]:
-    """Split text on double newlines into paragraphs."""
     parts = re.split(r"\n{2,}", text)
     return [p.strip() for p in parts if p.strip()]
 
 
 def _split_at_sentences(text: str, max_size: int) -> list[str]:
-    """Split a long text at sentence boundaries to fit max_size.
-
-    Falls back to line boundaries if sentence splitting is not effective
-    (e.g. command-line help text with no sentence-ending punctuation).
-    """
     sentences = _SENTENCE_BOUNDARY.split(text)
 
-    # If sentence split didn't help (single block), try splitting by lines
     if len(sentences) <= 1 and len(text) > max_size:
         sentences = [line for line in text.split("\n") if line.strip()]
 
@@ -78,7 +63,6 @@ def _split_at_sentences(text: str, max_size: int) -> list[str]:
         else:
             if current:
                 chunks.append(current)
-            # If a single part still exceeds max_size, force-split it
             if len(part) > max_size:
                 for i in range(0, len(part), max_size):
                     chunks.append(part[i : i + max_size].strip())
@@ -98,16 +82,6 @@ def chunk_text(
     min_chunk_size: int = DEFAULT_MIN_CHUNK_SIZE,
     max_chunk_size: int = DEFAULT_MAX_CHUNK_SIZE,
 ) -> list[str]:
-    """Split text into semantically coherent chunks.
-
-    Strategy:
-    1. Split on headings (==/##) into sections
-    2. Within each section, split on paragraphs (double newline)
-    3. Accumulate paragraphs into chunks up to chunk_size
-    4. If a single paragraph exceeds max_chunk_size, split at sentence boundaries
-    5. Prepend heading context to each chunk for better embedding quality
-    6. Merge small trailing chunks into the previous one
-    """
     if chunk_size <= 0:
         raise ValueError("chunk_size must be greater than zero")
 
@@ -137,9 +111,7 @@ def chunk_text(
         for paragraph in paragraphs:
             para_len = len(paragraph)
 
-            # If a single paragraph is too large, split at sentences
             if para_len > max_chunk_size - heading_len:
-                # Flush current accumulator first
                 if current_parts:
                     raw_chunks.append(heading_prefix + "\n\n".join(current_parts))
                     current_parts = []
@@ -150,8 +122,7 @@ def chunk_text(
                     raw_chunks.append(heading_prefix + sc)
                 continue
 
-            # Check if adding this paragraph would exceed chunk_size
-            separator_len = 2 if current_parts else 0  # \n\n between parts
+            separator_len = 2 if current_parts else 0
             if current_len + separator_len + para_len > chunk_size and current_parts:
                 raw_chunks.append(heading_prefix + "\n\n".join(current_parts))
                 current_parts = []
@@ -163,12 +134,10 @@ def chunk_text(
         if current_parts:
             raw_chunks.append(heading_prefix + "\n\n".join(current_parts))
 
-    # Merge small trailing chunks into previous
     if len(raw_chunks) >= 2 and len(raw_chunks[-1]) < min_chunk_size:
         raw_chunks[-2] = f"{raw_chunks[-2]}\n\n{raw_chunks[-1]}".strip()
         raw_chunks.pop()
 
-    # Filter out empty chunks
     return [c for c in raw_chunks if c.strip()]
 
 

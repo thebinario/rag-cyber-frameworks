@@ -23,7 +23,6 @@ _THINK_PATTERN = re.compile(r"<think>.*?</think>", re.DOTALL)
 
 
 def strip_think_tags(text: str) -> str:
-    """Remove <think>...</think> blocks from model output (safety net)."""
     return _THINK_PATTERN.sub("", text).strip()
 
 

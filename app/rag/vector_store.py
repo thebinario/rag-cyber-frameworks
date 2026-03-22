@@ -11,9 +11,9 @@ from app.ingest.ollama_client import OllamaEmbeddingClient
 try:
     import chromadb
     from chromadb.api.models.Collection import Collection
-except ImportError:  # pragma: no cover - exercised in runtime environments without Chroma
+except ImportError:
     chromadb = None
-    Collection = Any  # type: ignore[assignment]
+    Collection = Any
 
 
 DEFAULT_CHROMA_COLLECTION_NAME = "chunk_embeddings"

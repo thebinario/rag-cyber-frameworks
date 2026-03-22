@@ -17,8 +17,8 @@ from .vector_store import (
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CHUNKS_PATH = REPO_ROOT / "data" / "processed" / "chunks" / "chunks.jsonl"
-DEFAULT_INTERNAL_TOP_K = 8
-MAX_EXPANDED_QUERIES = 3
+DEFAULT_INTERNAL_TOP_K = 10
+MAX_EXPANDED_QUERIES = 5
 WORD_PATTERN = re.compile(r"[a-z0-9]+")
 DEFAULT_RETRIEVAL_MODE = "expanded"
 EXPANDED_RETRIEVAL_MODE = "expanded"
@@ -132,9 +132,22 @@ def _expand_neighbor_results(
     return expanded_results
 
 
+def _collect_search_terms(query_rewrite: QueryRewrite) -> set[str]:
+    terms: set[str] = set()
+    for term in query_rewrite.query_terms:
+        if len(term) > 2:
+            terms.add(term)
+    for expanded_query in query_rewrite.expanded_queries:
+        for term in _tokenize(expanded_query):
+            if len(term) > 2:
+                terms.add(term)
+    return terms
+
+
 def _score_result(
     result: dict[str, object],
     query_rewrite: QueryRewrite,
+    all_search_terms: set[str],
 ) -> tuple[float, list[str]]:
     result_text = str(result["text"])
     metadata = result["metadata"]
@@ -149,22 +162,9 @@ def _score_result(
         )
     )
 
-    matched_terms = sorted(
-        {
-            term
-            for term in query_rewrite.query_terms
-            if len(term) > 2 and term in haystack_terms
-        }
-    )
+    matched_terms = sorted(all_search_terms & haystack_terms)
 
-    lexical_score = len(matched_terms) * 0.08
-    if "subdomain" in haystack_terms and "dns" in haystack_terms:
-        lexical_score += 0.08
-    if "enumeration" in haystack_terms or "discover" in haystack_terms:
-        lexical_score += 0.04
-    if query_rewrite.tool_terms and any(tool in haystack_terms for tool in query_rewrite.tool_terms):
-        lexical_score += 0.08
-
+    lexical_score = len(matched_terms) * 0.05
     retrieval_score = lexical_score - float(result["distance"])
     return retrieval_score, matched_terms
 
@@ -178,12 +178,18 @@ def retrieve_chunks(
     model: str | None = None,
     chunks_path: str | Path = DEFAULT_CHUNKS_PATH,
     retrieval_mode: str = DEFAULT_RETRIEVAL_MODE,
+    rewriter_base_url: str | None = None,
+    rewriter_model: str | None = None,
 ) -> list[RetrievalResult]:
     if retrieval_mode not in VALID_RETRIEVAL_MODES:
         supported_modes = ", ".join(sorted(VALID_RETRIEVAL_MODES))
         raise ValueError(f"retrieval_mode must be one of: {supported_modes}")
 
-    query_rewrite = rewrite_query(query)
+    query_rewrite = rewrite_query(
+        query,
+        base_url=rewriter_base_url,
+        model=rewriter_model,
+    )
     if retrieval_mode == EXPANDED_RETRIEVAL_MODE:
         query_candidates = _build_query_candidates(query_rewrite)
         internal_top_k = max(DEFAULT_INTERNAL_TOP_K, top_k * 4)
@@ -204,10 +210,12 @@ def retrieve_chunks(
         chunk_map = _load_chunk_map(chunks_path)
         expanded_results = _expand_neighbor_results(merged_results, chunk_map)
 
+    all_search_terms = _collect_search_terms(query_rewrite)
+
     retrieval_results: list[RetrievalResult] = []
     for result in expanded_results.values():
         metadata = result["metadata"]
-        retrieval_score, matched_terms = _score_result(result, query_rewrite)
+        retrieval_score, matched_terms = _score_result(result, query_rewrite, all_search_terms)
         retrieval_results.append(
             RetrievalResult(
                 chunk_id=result["chunk_id"],
@@ -226,7 +234,6 @@ def retrieve_chunks(
 
     retrieval_results.sort(
         key=lambda result: (
-            -len(result.matched_terms),
             -result.retrieval_score,
             result.distance,
             result.chunk_index,

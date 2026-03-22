@@ -72,12 +72,6 @@ class OllamaEmbeddingClient(OllamaClient):
 
 
 class OllamaGenerationClient(OllamaClient):
-    """Ollama text generation client using the /api/chat endpoint.
-
-    Uses /api/chat instead of /api/generate to support the ``think`` flag
-    which disables the reasoning/thinking mode in models like qwen3.5.
-    """
-
     def generate(self, prompt: str, options: dict[str, object] | None = None) -> str:
         request_body: dict[str, object] = {
             "model": self.model,

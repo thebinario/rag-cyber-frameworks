@@ -34,7 +34,6 @@ _ABBREVIATION_LINE = re.compile(r"^[A-Z&/]{2,}\s+\S", re.MULTILINE)
 
 
 def _is_low_quality_chunk(text: str) -> bool:
-    """Return True if a chunk is unlikely to contain useful content."""
     stripped = text.strip()
     if len(stripped) < 50:
         return True
