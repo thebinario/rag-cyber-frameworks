@@ -21,16 +21,19 @@ _THINK_PATTERN = re.compile(r"<think>.*?</think>", re.DOTALL)
 
 REWRITER_PROMPT_TEMPLATE = (
     "You are a cybersecurity search query optimizer for a RAG system that indexes "
-    "penetration testing frameworks (PTES, NIST SP 800-115, OWASP, OSSTMM).\n\n"
-    "Given the user question below, generate 4 to 6 alternative search queries that "
+    "penetration testing frameworks (PTES, NIST SP 800-115, OWASP, OSSTMM), "
+    "Kali Linux tool documentation, and HackTricks pentesting guides.\n\n"
+    "Given the user question below, generate 5 to 7 alternative search queries that "
     "would retrieve the most relevant chunks from these documents.\n\n"
     "Rules:\n"
     "- Always expand acronyms into full words (OSINT -> open source intelligence, "
     "SQLi -> SQL injection, XSS -> cross site scripting, RCE -> remote code execution)\n"
     "- Each query must be directly relevant to the user question topic\n"
     "- Include specific tool names and CLI commands related to the topic\n"
+    "- One query should combine tool name + target protocol/service (e.g. 'hydra ftp brute force')\n"
     "- One query should list tool names specific to the topic (not generic tools)\n"
     "- One query should describe the technique at a conceptual level using full words\n"
+    "- If a specific tool is mentioned, include a query with the tool name + command syntax\n"
     "- Keep each query short (3-8 words)\n"
     "- Output ONLY the queries, one per line, no numbering, no explanation\n\n"
     "User question: {question}\n\n"
@@ -64,7 +67,7 @@ def _parse_llm_queries(raw_output: str) -> list[str]:
         if len(line) < 5 or len(line) > 200:
             continue
         queries.append(line)
-    return queries[:5]
+    return queries[:7]
 
 
 def _generate_expanded_queries(

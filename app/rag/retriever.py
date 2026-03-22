@@ -17,12 +17,17 @@ from .vector_store import (
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CHUNKS_PATH = REPO_ROOT / "data" / "processed" / "chunks" / "chunks.jsonl"
-DEFAULT_INTERNAL_TOP_K = 10
-MAX_EXPANDED_QUERIES = 5
+DEFAULT_INTERNAL_TOP_K = 20
+MAX_EXPANDED_QUERIES = 7
 WORD_PATTERN = re.compile(r"[a-z0-9]+")
 DEFAULT_RETRIEVAL_MODE = "expanded"
 EXPANDED_RETRIEVAL_MODE = "expanded"
 VALID_RETRIEVAL_MODES = {DEFAULT_RETRIEVAL_MODE, EXPANDED_RETRIEVAL_MODE}
+
+_PRACTICAL_INTENT_WORDS = {"how", "use", "example", "command", "run", "execute", "tutorial", "usage", "syntax"}
+_CLI_COMMAND_PATTERN = re.compile(
+    r"(?:^|\n)\s*(?:(?:root@|\\$|#|>)\s*\S+|(?:sudo\s+)?\S+\s+-[a-zA-Z])"
+)
 
 
 @dataclass(frozen=True)
@@ -144,6 +149,18 @@ def _collect_search_terms(query_rewrite: QueryRewrite) -> set[str]:
     return terms
 
 
+def _has_practical_intent(query_terms: list[str]) -> bool:
+    return bool(set(query_terms) & _PRACTICAL_INTENT_WORDS)
+
+
+def _has_cli_examples(text: str) -> bool:
+    return bool(_CLI_COMMAND_PATTERN.search(text))
+
+
+def _extract_tool_names(query_terms: list[str]) -> set[str]:
+    return {t for t in query_terms if len(t) > 2 and t.isalpha() and t.islower()}
+
+
 def _score_result(
     result: dict[str, object],
     query_rewrite: QueryRewrite,
@@ -151,21 +168,34 @@ def _score_result(
 ) -> tuple[float, list[str]]:
     result_text = str(result["text"])
     metadata = result["metadata"]
-    haystack_terms = _tokenize(
-        " ".join(
-            [
-                result_text,
-                str(metadata["title"]),
-                str(metadata["framework"]),
-                str(metadata["source_path"]),
-            ]
-        )
+    haystack_text = " ".join(
+        [
+            result_text,
+            str(metadata["title"]),
+            str(metadata["framework"]),
+            str(metadata["source_path"]),
+        ]
     )
+    haystack_terms = _tokenize(haystack_text)
 
     matched_terms = sorted(all_search_terms & haystack_terms)
 
     lexical_score = len(matched_terms) * 0.05
-    retrieval_score = lexical_score - float(result["distance"])
+
+    practical_boost = 0.0
+    if _has_practical_intent(query_rewrite.query_terms) and _has_cli_examples(result_text):
+        practical_boost = 0.15
+
+    tool_boost = 0.0
+    query_tool_names = _extract_tool_names(query_rewrite.query_terms)
+    doc_id_lower = str(metadata.get("document_id", "")).lower()
+    title_lower = str(metadata.get("title", "")).lower()
+    for tool_name in query_tool_names:
+        if tool_name in doc_id_lower or tool_name in title_lower:
+            tool_boost = 0.12
+            break
+
+    retrieval_score = lexical_score + practical_boost + tool_boost - float(result["distance"])
     return retrieval_score, matched_terms
 
 
@@ -239,7 +269,29 @@ def retrieve_chunks(
             result.chunk_index,
         )
     )
-    return retrieval_results[:top_k]
+    return _diversify_results(retrieval_results, top_k)
+
+
+MAX_CHUNKS_PER_DOCUMENT = 3
+
+
+def _diversify_results(
+    results: list[RetrievalResult],
+    top_k: int,
+) -> list[RetrievalResult]:
+    selected: list[RetrievalResult] = []
+    doc_counts: dict[str, int] = {}
+
+    for result in results:
+        if len(selected) >= top_k:
+            break
+        count = doc_counts.get(result.document_id, 0)
+        if count >= MAX_CHUNKS_PER_DOCUMENT:
+            continue
+        selected.append(result)
+        doc_counts[result.document_id] = count + 1
+
+    return selected
 
 
 def format_retrieval_context(results: list[RetrievalResult]) -> str:

@@ -23,7 +23,7 @@ from .vector_store import (
 )
 
 MAX_GENERATION_CHUNK_CHARACTERS = 1200
-MAX_GENERATION_SOURCES = 3
+MAX_GENERATION_SOURCES = 5
 
 _LOW_QUALITY_INDICATORS = re.compile(
     r"table of contents|list of abbreviations|glossary|list of acronyms",
