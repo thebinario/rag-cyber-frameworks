@@ -1,0 +1,17 @@
+{
+  "id": "owasp-wstg-wstg-info-09-fingerprint_web_application",
+  "title": "OWASP WSTG WSTG-INFO: 09-Fingerprint Web Application",
+  "framework": "owasp",
+  "source_type": "markdown",
+  "language": "en",
+  "path": "data/raw/owasp-wstg/WSTG-INFO_09-Fingerprint_Web_Application.md",
+  "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/09-Fingerprint_Web_Application.md",
+  "ingestion_status": "discovered",
+  "processing_status": "processed",
+  "loader_type": "markdown",
+  "text": "# Fingerprint Web Application\n\n|ID          |\n|------------|\n|WSTG-INFO-09|\n\nThis content has been merged into: [Fingerprint Web Application Framework](08-Fingerprint_Web_Application_Framework.md).\n\n[merged]: # (WSTG-INFO-08)\n",
+  "clean_text": "# Fingerprint Web Application\n\n|ID |\n|------------|\n|WSTG-INFO-09|\n\nThis content has been merged into: [Fingerprint Web Application Framework](08-Fingerprint_Web_Application_Framework.md).\n\n[merged]: # (WSTG-INFO-08)",
+  "error": null,
+  "processed_at": "2026-03-22T02:46:51.756912+00:00",
+  "output_path": "data/processed/documents/owasp-wstg-wstg-info-09-fingerprint_web_application.json"
+}

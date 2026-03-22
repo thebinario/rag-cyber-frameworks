@@ -99,12 +99,14 @@ def build_vector_index(
     valid_records = [record for record in records if record.embedding is not None]
     skipped_records = len(records) - len(valid_records)
 
-    if valid_records:
+    batch_size = 5000
+    for i in range(0, len(valid_records), batch_size):
+        batch = valid_records[i : i + batch_size]
         collection.add(
-            ids=[record.chunk_id for record in valid_records],
-            embeddings=[record.embedding for record in valid_records],
-            documents=[record.text for record in valid_records],
-            metadatas=[_build_collection_metadata(record) for record in valid_records],
+            ids=[record.chunk_id for record in batch],
+            embeddings=[record.embedding for record in batch],
+            documents=[record.text for record in batch],
+            metadatas=[_build_collection_metadata(record) for record in batch],
         )
 
     return {

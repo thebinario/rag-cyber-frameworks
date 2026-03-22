@@ -1,0 +1,17 @@
+{
+  "id": "owasp-wstg-wstg-conf-08-test_ria_cross_domain_policy",
+  "title": "OWASP WSTG WSTG-CONF: 08-Test RIA Cross Domain Policy",
+  "framework": "owasp",
+  "source_type": "markdown",
+  "language": "en",
+  "path": "data/raw/owasp-wstg/WSTG-CONF_08-Test_RIA_Cross_Domain_Policy.md",
+  "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/08-Test_RIA_Cross_Domain_Policy.md",
+  "ingestion_status": "discovered",
+  "processing_status": "processed",
+  "loader_type": "markdown",
+  "text": "# Test RIA Cross Domain Policy\n\n|ID          |\n|------------|\n|WSTG-CONF-08|\n\nThis content has been removed.\n",
+  "clean_text": "# Test RIA Cross Domain Policy\n\n|ID |\n|------------|\n|WSTG-CONF-08|\n\nThis content has been removed.",
+  "error": null,
+  "processed_at": "2026-03-22T02:46:51.777142+00:00",
+  "output_path": "data/processed/documents/owasp-wstg-wstg-conf-08-test_ria_cross_domain_policy.json"
+}

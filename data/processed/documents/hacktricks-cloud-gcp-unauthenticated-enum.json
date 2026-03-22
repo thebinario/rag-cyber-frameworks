@@ -1,0 +1,17 @@
+{
+  "id": "hacktricks-cloud-gcp-unauthenticated-enum",
+  "title": "HackTricks Cloud - Gcp Unauthenticated Enum",
+  "framework": "hacktricks-cloud",
+  "source_type": "markdown",
+  "language": "en",
+  "path": "data/raw/hacktricks-cloud/gcp-unauthenticated-enum.md",
+  "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/gcp-security/gcp-unauthenticated-enum-and-access/README.md",
+  "ingestion_status": "discovered",
+  "processing_status": "processed",
+  "loader_type": "markdown",
+  "text": "# GCP - Unauthenticated Enum & Access\n\n{{#include ../../../banners/hacktricks-training.md}}\n\n## Public Assets Discovery\n\nOne way to discover public cloud resources that belongs to a company is to scrape their webs looking for them. Tools like [**CloudScraper**](https://github.com/jordanpotti/CloudScraper) will scrape the web an search for **links to public cloud resources** (in this case this tools searches `['amazonaws.com', 'digitaloceanspaces.com', 'windows.net', 'storage.googleapis.com', 'aliyuncs.com']`)\n\nNote that other cloud resources could be searched for and that some times these resources are hidden behind **subdomains that are pointing them via CNAME registry**.\n\n## Public Resources Brute-Force\n\n### Buckets, Firebase, Apps & Cloud Functions\n\n- [https://github.com/initstring/cloud_enum](https://github.com/initstring/cloud_enum): This tool in GCP brute-force Buckets, Firebase Realtime Databases, Google App Engine sites, and Cloud Functions\n- [https://github.com/0xsha/CloudBrute](https://github.com/0xsha/CloudBrute): This tool in GCP brute-force Buckets and Apps.\n\n{{#include ../../../banners/hacktricks-training.md}}\n\n\n\n",
+  "clean_text": "# GCP - Unauthenticated Enum & Access\n\n{{#include ../../../banners/hacktricks-training.md}}\n\n## Public Assets Discovery\n\nOne way to discover public cloud resources that belongs to a company is to scrape their webs looking for them. Tools like [**CloudScraper**](https://github.com/jordanpotti/CloudScraper) will scrape the web an search for **links to public cloud resources** (in this case this tools searches `['amazonaws.com', 'digitaloceanspaces.com', 'windows.net', 'storage.googleapis.com', 'aliyuncs.com']`)\n\nNote that other cloud resources could be searched for and that some times these resources are hidden behind **subdomains that are pointing them via CNAME registry**.\n\n## Public Resources Brute-Force\n\n### Buckets, Firebase, Apps & Cloud Functions\n\n- This tool in GCP brute-force Buckets, Firebase Realtime Databases, Google App Engine sites, and Cloud Functions\n- [https://github.com/0xsha/CloudBrute(https://github.com/0xsha/CloudBrute): This tool in GCP brute-force Buckets and Apps.\n\n{{#include ../../../banners/hacktricks-training.md}}",
+  "error": null,
+  "processed_at": "2026-03-22T02:46:52.422896+00:00",
+  "output_path": "data/processed/documents/hacktricks-cloud-gcp-unauthenticated-enum.json"
+}
