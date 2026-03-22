@@ -1,0 +1,5 @@
+# AWS - Persistence
+
+{{#include ../../../banners/hacktricks-training.md}}
+
+

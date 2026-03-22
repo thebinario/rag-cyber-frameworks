@@ -1,0 +1,5 @@
+# GCP - Persistence
+
+{{#include ../../../banners/hacktricks-training.md}}
+
+

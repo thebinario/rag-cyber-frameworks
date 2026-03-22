@@ -142,6 +142,8 @@ NIST_PDFS = {
     "NIST.CSWP.29": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf",
     "nistspecialpublication800-115": "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-115.pdf",
     "nistspecialpublication800-53r5": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.pdf",
+    "nistspecialpublication800-144": "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-144.pdf",
+    "nistspecialpublication800-210": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-210.pdf",
 }
 
 
@@ -193,50 +195,88 @@ def download_osstmm() -> list[dict[str, str]]:
     return []
 
 
-OWASP_WSTG_SECTIONS = {
-    "WSTG-INFO": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/README.md",
-    "WSTG-CONF": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/README.md",
-    "WSTG-IDNT": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/03-Identity_Management_Testing/README.md",
-    "WSTG-ATHN": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/README.md",
-    "WSTG-ATHZ": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/05-Authorization_Testing/README.md",
-    "WSTG-SESS": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/README.md",
-    "WSTG-INPV": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/README.md",
-    "WSTG-ERRH": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/08-Testing_for_Error_Handling/README.md",
-    "WSTG-CRYP": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/09-Testing_for_Weak_Cryptography/README.md",
-    "WSTG-BUSL": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/README.md",
-    "WSTG-CLNT": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/README.md",
-    "WSTG-APIT": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/12-API_Testing/README.md",
+WSTG_BASE_URL = "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing"
+WSTG_API_URL = "https://api.github.com/repos/OWASP/wstg/contents/document/4-Web_Application_Security_Testing"
+
+WSTG_SECTION_IDS = {
+    "01-Information_Gathering": "WSTG-INFO",
+    "02-Configuration_and_Deployment_Management_Testing": "WSTG-CONF",
+    "03-Identity_Management_Testing": "WSTG-IDNT",
+    "04-Authentication_Testing": "WSTG-ATHN",
+    "05-Authorization_Testing": "WSTG-ATHZ",
+    "06-Session_Management_Testing": "WSTG-SESS",
+    "07-Input_Validation_Testing": "WSTG-INPV",
+    "08-Testing_for_Error_Handling": "WSTG-ERRH",
+    "09-Testing_for_Weak_Cryptography": "WSTG-CRYP",
+    "10-Business_Logic_Testing": "WSTG-BUSL",
+    "11-Client-side_Testing": "WSTG-CLNT",
+    "12-API_Testing": "WSTG-APIT",
 }
 
 
+def _list_wstg_section_files(section_folder: str) -> list[str]:
+    api_url = f"{WSTG_API_URL}/{section_folder}"
+    req = request.Request(api_url, headers={
+        **REQUEST_HEADERS,
+        "Accept": "application/vnd.github.v3+json",
+    })
+    try:
+        with _urlopen(req) as resp:
+            entries = json.loads(resp.read().decode("utf-8"))
+        return [
+            entry["name"]
+            for entry in entries
+            if entry["name"].endswith(".md") and entry["name"] != "README.md"
+        ]
+    except (error.URLError, error.HTTPError, OSError) as exc:
+        print(f"  FAILED listing {section_folder}: {exc}")
+        return []
+
+
 def download_owasp_wstg() -> list[dict[str, str]]:
-    print("\n[OWASP WSTG] Downloading sections from GitHub...")
+    print("\n[OWASP WSTG] Downloading test cases from GitHub...")
     dest_dir = RAW_DIR / "owasp-wstg"
     dest_dir.mkdir(parents=True, exist_ok=True)
     documents: list[dict[str, str]] = []
 
-    for section_id, url in OWASP_WSTG_SECTIONS.items():
-        filename = f"{section_id}.md"
-        dest = dest_dir / filename
-        print(f"  {section_id} <- {url}")
+    for section_folder, section_id in WSTG_SECTION_IDS.items():
+        print(f"\n  [{section_id}] Listing files in {section_folder}...")
+        md_files = _list_wstg_section_files(section_folder)
 
-        if _download(url, dest):
-            content = dest.read_text(encoding="utf-8", errors="replace")
-            if len(content) < 100:
-                print(f"  WARNING: content too short ({len(content)} chars), skipping")
-                continue
-            documents.append({
-                "id": f"owasp-wstg-{section_id.lower()}",
-                "title": f"OWASP WSTG {section_id}",
-                "framework": "owasp",
-                "source_type": "markdown",
-                "language": "en",
-                "path": f"data/raw/owasp-wstg/{filename}",
-                "origin": url,
-            })
-            print(f"  OK ({len(content)} chars)")
+        if not md_files:
+            print(f"  WARNING: no test case files found for {section_id}")
+            continue
 
-        time.sleep(DELAY_BETWEEN_REQUESTS)
+        print(f"  Found {len(md_files)} test case(s)")
+
+        for md_file in sorted(md_files):
+            url = f"{WSTG_BASE_URL}/{section_folder}/{md_file}"
+            safe_name = md_file.replace(" ", "_")
+            filename = f"{section_id}_{safe_name}"
+            dest = dest_dir / filename
+            test_name = md_file.replace(".md", "").replace("_", " ")
+            print(f"    {filename} <- .../{md_file}")
+
+            if _download(url, dest):
+                content = dest.read_text(encoding="utf-8", errors="replace")
+                if len(content) < 100:
+                    print(f"    WARNING: content too short ({len(content)} chars), skipping")
+                    continue
+                doc_id = f"owasp-wstg-{section_id.lower()}-{safe_name.replace('.md', '').lower()}"
+                documents.append({
+                    "id": doc_id,
+                    "title": f"OWASP WSTG {section_id}: {test_name}",
+                    "framework": "owasp",
+                    "source_type": "markdown",
+                    "language": "en",
+                    "path": f"data/raw/owasp-wstg/{filename}",
+                    "origin": url,
+                })
+                print(f"    OK ({len(content)} chars)")
+            else:
+                print(f"    SKIPPED")
+
+            time.sleep(DELAY_BETWEEN_REQUESTS)
 
     return documents
 
@@ -250,6 +290,7 @@ KALI_TOOLS = [
     "whatweb", "wafw00f", "skipfish", "medusa", "ncrack",
     "reaver", "bettercap", "ettercap", "mitmproxy",
     "searchsploit", "exploitdb",
+    "pacu", "scoutsuite", "cloudfox", "trufflehog",
 ]
 
 KALI_TOOLS_URL = "https://www.kali.org/tools/{tool}/"
@@ -363,6 +404,76 @@ def download_hacktricks() -> list[dict[str, str]]:
     return documents
 
 
+_HT_CLOUD_BASE = "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src"
+
+HACKTRICKS_CLOUD_SECTIONS = {
+    "cloud-methodology": f"{_HT_CLOUD_BASE}/pentesting-cloud/pentesting-cloud-methodology.md",
+    "aws-pentesting": f"{_HT_CLOUD_BASE}/pentesting-cloud/aws-security/README.md",
+    "aws-privilege-escalation": f"{_HT_CLOUD_BASE}/pentesting-cloud/aws-security/aws-privilege-escalation/README.md",
+    "aws-persistence": f"{_HT_CLOUD_BASE}/pentesting-cloud/aws-security/aws-persistence/README.md",
+    "aws-post-exploitation": f"{_HT_CLOUD_BASE}/pentesting-cloud/aws-security/aws-post-exploitation/README.md",
+    "aws-unauthenticated-enum": f"{_HT_CLOUD_BASE}/pentesting-cloud/aws-security/aws-unauthenticated-enum-access/README.md",
+    "aws-basic-information": f"{_HT_CLOUD_BASE}/pentesting-cloud/aws-security/aws-basic-information/README.md",
+    "azure-pentesting": f"{_HT_CLOUD_BASE}/pentesting-cloud/azure-security/README.md",
+    "azure-privilege-escalation": f"{_HT_CLOUD_BASE}/pentesting-cloud/azure-security/az-privilege-escalation/README.md",
+    "azure-persistence": f"{_HT_CLOUD_BASE}/pentesting-cloud/azure-security/az-persistence/README.md",
+    "azure-post-exploitation": f"{_HT_CLOUD_BASE}/pentesting-cloud/azure-security/az-post-exploitation/README.md",
+    "azure-unauthenticated-enum": f"{_HT_CLOUD_BASE}/pentesting-cloud/azure-security/az-unauthenticated-enum-and-initial-entry/README.md",
+    "azure-enumeration-tools": f"{_HT_CLOUD_BASE}/pentesting-cloud/azure-security/az-enumeration-tools.md",
+    "gcp-pentesting": f"{_HT_CLOUD_BASE}/pentesting-cloud/gcp-security/README.md",
+    "gcp-privilege-escalation": f"{_HT_CLOUD_BASE}/pentesting-cloud/gcp-security/gcp-privilege-escalation/README.md",
+    "gcp-persistence": f"{_HT_CLOUD_BASE}/pentesting-cloud/gcp-security/gcp-persistence/README.md",
+    "gcp-post-exploitation": f"{_HT_CLOUD_BASE}/pentesting-cloud/gcp-security/gcp-post-exploitation/README.md",
+    "gcp-unauthenticated-enum": f"{_HT_CLOUD_BASE}/pentesting-cloud/gcp-security/gcp-unauthenticated-enum-and-access/README.md",
+    "kubernetes-pentesting": f"{_HT_CLOUD_BASE}/pentesting-cloud/kubernetes-security/README.md",
+    "kubernetes-enumeration": f"{_HT_CLOUD_BASE}/pentesting-cloud/kubernetes-security/kubernetes-enumeration.md",
+    "kubernetes-network-attacks": f"{_HT_CLOUD_BASE}/pentesting-cloud/kubernetes-security/kubernetes-network-attacks.md",
+    "kubernetes-rbac": f"{_HT_CLOUD_BASE}/pentesting-cloud/kubernetes-security/kubernetes-role-based-access-control-rbac.md",
+    "kubernetes-abusing-roles": f"{_HT_CLOUD_BASE}/pentesting-cloud/kubernetes-security/abusing-roles-clusterroles-in-kubernetes/README.md",
+    "kubernetes-attacking-from-pod": f"{_HT_CLOUD_BASE}/pentesting-cloud/kubernetes-security/attacking-kubernetes-from-inside-a-pod.md",
+    "kubernetes-pivoting-to-clouds": f"{_HT_CLOUD_BASE}/pentesting-cloud/kubernetes-security/kubernetes-pivoting-to-clouds.md",
+    "cicd-methodology": f"{_HT_CLOUD_BASE}/pentesting-ci-cd/pentesting-ci-cd-methodology.md",
+    "github-security": f"{_HT_CLOUD_BASE}/pentesting-ci-cd/github-security/README.md",
+    "jenkins-security": f"{_HT_CLOUD_BASE}/pentesting-ci-cd/jenkins-security/README.md",
+    "terraform-security": f"{_HT_CLOUD_BASE}/pentesting-ci-cd/terraform-security.md",
+}
+
+
+def download_hacktricks_cloud() -> list[dict[str, str]]:
+    print("\n[HACKTRICKS CLOUD] Downloading cloud sections from GitHub...")
+    dest_dir = RAW_DIR / "hacktricks-cloud"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    documents: list[dict[str, str]] = []
+
+    for section_id, url in HACKTRICKS_CLOUD_SECTIONS.items():
+        filename = f"{section_id}.md"
+        dest = dest_dir / filename
+        print(f"  {section_id} <- {url}")
+
+        try:
+            if not _download(url, dest):
+                continue
+            content = dest.read_text(encoding="utf-8")
+            if len(content) < 100:
+                print(f"  WARNING: content too short ({len(content)} chars), skipping")
+                continue
+            documents.append({
+                "id": f"hacktricks-cloud-{section_id}",
+                "title": f"HackTricks Cloud - {section_id.replace('-', ' ').title()}",
+                "framework": "hacktricks-cloud",
+                "source_type": "markdown",
+                "language": "en",
+                "path": f"data/raw/hacktricks-cloud/{filename}",
+                "origin": url,
+            })
+            print(f"  OK ({len(content)} chars)")
+        except Exception as exc:
+            print(f"  FAILED: {exc}")
+        time.sleep(DELAY_BETWEEN_REQUESTS)
+
+    return documents
+
+
 def build_manifest(all_documents: list[dict[str, str]]) -> None:
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
 
@@ -398,6 +509,7 @@ def main() -> None:
     all_documents.extend(download_owasp_wstg())
     all_documents.extend(scrape_kali_tools())
     all_documents.extend(download_hacktricks())
+    all_documents.extend(download_hacktricks_cloud())
 
     build_manifest(all_documents)
 

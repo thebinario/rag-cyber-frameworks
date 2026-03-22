@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-03-22T02:14:28.108103+00:00",
-  "document_count": 80,
+  "generated_at": "2026-03-22T02:44:05.268422+00:00",
+  "document_count": 223,
   "documents": [
     {
       "id": "ptes-pre-engagement",
@@ -113,6 +113,26 @@
       "ingestion_status": "discovered"
     },
     {
+      "id": "nist-nistspecialpublication800-144",
+      "title": "nistspecialpublication800-144",
+      "framework": "nist",
+      "source_type": "pdf",
+      "language": "en",
+      "path": "data/raw/nist/nistspecialpublication800-144.pdf",
+      "origin": "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-144.pdf",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "nist-nistspecialpublication800-210",
+      "title": "nistspecialpublication800-210",
+      "framework": "nist",
+      "source_type": "pdf",
+      "language": "en",
+      "path": "data/raw/nist/nistspecialpublication800-210.pdf",
+      "origin": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-210.pdf",
+      "ingestion_status": "discovered"
+    },
+    {
       "id": "osstmm-osstmm-3",
       "title": "OSSTMM.3",
       "framework": "osstmm",
@@ -123,123 +143,1273 @@
       "ingestion_status": "discovered"
     },
     {
-      "id": "owasp-wstg-wstg-info",
-      "title": "OWASP WSTG WSTG-INFO",
+      "id": "owasp-wstg-wstg-info-01-conduct_search_engine_discovery_reconnaissance_for_information_leakage",
+      "title": "OWASP WSTG WSTG-INFO: 01-Conduct Search Engine Discovery Reconnaissance for Information Leakage",
       "framework": "owasp",
       "source_type": "markdown",
       "language": "en",
-      "path": "data/raw/owasp-wstg/WSTG-INFO.md",
-      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/README.md",
+      "path": "data/raw/owasp-wstg/WSTG-INFO_01-Conduct_Search_Engine_Discovery_Reconnaissance_for_Information_Leakage.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/01-Conduct_Search_Engine_Discovery_Reconnaissance_for_Information_Leakage.md",
       "ingestion_status": "discovered"
     },
     {
-      "id": "owasp-wstg-wstg-conf",
-      "title": "OWASP WSTG WSTG-CONF",
+      "id": "owasp-wstg-wstg-info-02-fingerprint_web_server",
+      "title": "OWASP WSTG WSTG-INFO: 02-Fingerprint Web Server",
       "framework": "owasp",
       "source_type": "markdown",
       "language": "en",
-      "path": "data/raw/owasp-wstg/WSTG-CONF.md",
-      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/README.md",
+      "path": "data/raw/owasp-wstg/WSTG-INFO_02-Fingerprint_Web_Server.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/02-Fingerprint_Web_Server.md",
       "ingestion_status": "discovered"
     },
     {
-      "id": "owasp-wstg-wstg-idnt",
-      "title": "OWASP WSTG WSTG-IDNT",
+      "id": "owasp-wstg-wstg-info-03-review_webserver_metafiles_for_information_leakage",
+      "title": "OWASP WSTG WSTG-INFO: 03-Review Webserver Metafiles for Information Leakage",
       "framework": "owasp",
       "source_type": "markdown",
       "language": "en",
-      "path": "data/raw/owasp-wstg/WSTG-IDNT.md",
-      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/03-Identity_Management_Testing/README.md",
+      "path": "data/raw/owasp-wstg/WSTG-INFO_03-Review_Webserver_Metafiles_for_Information_Leakage.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/03-Review_Webserver_Metafiles_for_Information_Leakage.md",
       "ingestion_status": "discovered"
     },
     {
-      "id": "owasp-wstg-wstg-athn",
-      "title": "OWASP WSTG WSTG-ATHN",
+      "id": "owasp-wstg-wstg-info-04-attack_surface_identification",
+      "title": "OWASP WSTG WSTG-INFO: 04-Attack Surface Identification",
       "framework": "owasp",
       "source_type": "markdown",
       "language": "en",
-      "path": "data/raw/owasp-wstg/WSTG-ATHN.md",
-      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/README.md",
+      "path": "data/raw/owasp-wstg/WSTG-INFO_04-Attack_Surface_Identification.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/04-Attack_Surface_Identification.md",
       "ingestion_status": "discovered"
     },
     {
-      "id": "owasp-wstg-wstg-athz",
-      "title": "OWASP WSTG WSTG-ATHZ",
+      "id": "owasp-wstg-wstg-info-05-review_web_page_content_for_information_leakage",
+      "title": "OWASP WSTG WSTG-INFO: 05-Review Web Page Content for Information Leakage",
       "framework": "owasp",
       "source_type": "markdown",
       "language": "en",
-      "path": "data/raw/owasp-wstg/WSTG-ATHZ.md",
-      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/05-Authorization_Testing/README.md",
+      "path": "data/raw/owasp-wstg/WSTG-INFO_05-Review_Web_Page_Content_for_Information_Leakage.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/05-Review_Web_Page_Content_for_Information_Leakage.md",
       "ingestion_status": "discovered"
     },
     {
-      "id": "owasp-wstg-wstg-sess",
-      "title": "OWASP WSTG WSTG-SESS",
+      "id": "owasp-wstg-wstg-info-06-identify_application_entry_points",
+      "title": "OWASP WSTG WSTG-INFO: 06-Identify Application Entry Points",
       "framework": "owasp",
       "source_type": "markdown",
       "language": "en",
-      "path": "data/raw/owasp-wstg/WSTG-SESS.md",
-      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/README.md",
+      "path": "data/raw/owasp-wstg/WSTG-INFO_06-Identify_Application_Entry_Points.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/06-Identify_Application_Entry_Points.md",
       "ingestion_status": "discovered"
     },
     {
-      "id": "owasp-wstg-wstg-inpv",
-      "title": "OWASP WSTG WSTG-INPV",
+      "id": "owasp-wstg-wstg-info-07-map_execution_paths_through_application",
+      "title": "OWASP WSTG WSTG-INFO: 07-Map Execution Paths Through Application",
       "framework": "owasp",
       "source_type": "markdown",
       "language": "en",
-      "path": "data/raw/owasp-wstg/WSTG-INPV.md",
-      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/README.md",
+      "path": "data/raw/owasp-wstg/WSTG-INFO_07-Map_Execution_Paths_Through_Application.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/07-Map_Execution_Paths_Through_Application.md",
       "ingestion_status": "discovered"
     },
     {
-      "id": "owasp-wstg-wstg-errh",
-      "title": "OWASP WSTG WSTG-ERRH",
+      "id": "owasp-wstg-wstg-info-08-fingerprint_web_application_framework",
+      "title": "OWASP WSTG WSTG-INFO: 08-Fingerprint Web Application Framework",
       "framework": "owasp",
       "source_type": "markdown",
       "language": "en",
-      "path": "data/raw/owasp-wstg/WSTG-ERRH.md",
-      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/08-Testing_for_Error_Handling/README.md",
+      "path": "data/raw/owasp-wstg/WSTG-INFO_08-Fingerprint_Web_Application_Framework.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/08-Fingerprint_Web_Application_Framework.md",
       "ingestion_status": "discovered"
     },
     {
-      "id": "owasp-wstg-wstg-cryp",
-      "title": "OWASP WSTG WSTG-CRYP",
+      "id": "owasp-wstg-wstg-info-09-fingerprint_web_application",
+      "title": "OWASP WSTG WSTG-INFO: 09-Fingerprint Web Application",
       "framework": "owasp",
       "source_type": "markdown",
       "language": "en",
-      "path": "data/raw/owasp-wstg/WSTG-CRYP.md",
-      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/09-Testing_for_Weak_Cryptography/README.md",
+      "path": "data/raw/owasp-wstg/WSTG-INFO_09-Fingerprint_Web_Application.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/09-Fingerprint_Web_Application.md",
       "ingestion_status": "discovered"
     },
     {
-      "id": "owasp-wstg-wstg-busl",
-      "title": "OWASP WSTG WSTG-BUSL",
+      "id": "owasp-wstg-wstg-info-10-map_application_architecture",
+      "title": "OWASP WSTG WSTG-INFO: 10-Map Application Architecture",
       "framework": "owasp",
       "source_type": "markdown",
       "language": "en",
-      "path": "data/raw/owasp-wstg/WSTG-BUSL.md",
-      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/README.md",
+      "path": "data/raw/owasp-wstg/WSTG-INFO_10-Map_Application_Architecture.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/01-Information_Gathering/10-Map_Application_Architecture.md",
       "ingestion_status": "discovered"
     },
     {
-      "id": "owasp-wstg-wstg-clnt",
-      "title": "OWASP WSTG WSTG-CLNT",
+      "id": "owasp-wstg-wstg-conf-01-test_network_infrastructure_configuration",
+      "title": "OWASP WSTG WSTG-CONF: 01-Test Network Infrastructure Configuration",
       "framework": "owasp",
       "source_type": "markdown",
       "language": "en",
-      "path": "data/raw/owasp-wstg/WSTG-CLNT.md",
-      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/README.md",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_01-Test_Network_Infrastructure_Configuration.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/01-Test_Network_Infrastructure_Configuration.md",
       "ingestion_status": "discovered"
     },
     {
-      "id": "owasp-wstg-wstg-apit",
-      "title": "OWASP WSTG WSTG-APIT",
+      "id": "owasp-wstg-wstg-conf-02-test_application_platform_configuration",
+      "title": "OWASP WSTG WSTG-CONF: 02-Test Application Platform Configuration",
       "framework": "owasp",
       "source_type": "markdown",
       "language": "en",
-      "path": "data/raw/owasp-wstg/WSTG-APIT.md",
-      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/12-API_Testing/README.md",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_02-Test_Application_Platform_Configuration.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/02-Test_Application_Platform_Configuration.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-conf-03-test_file_extensions_handling_for_sensitive_information",
+      "title": "OWASP WSTG WSTG-CONF: 03-Test File Extensions Handling for Sensitive Information",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_03-Test_File_Extensions_Handling_for_Sensitive_Information.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/03-Test_File_Extensions_Handling_for_Sensitive_Information.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-conf-04-review_old_backup_and_unreferenced_files_for_sensitive_information",
+      "title": "OWASP WSTG WSTG-CONF: 04-Review Old Backup and Unreferenced Files for Sensitive Information",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-conf-05-enumerate_infrastructure_and_application_admin_interfaces",
+      "title": "OWASP WSTG WSTG-CONF: 05-Enumerate Infrastructure and Application Admin Interfaces",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_05-Enumerate_Infrastructure_and_Application_Admin_Interfaces.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/05-Enumerate_Infrastructure_and_Application_Admin_Interfaces.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-conf-06-test_http_methods",
+      "title": "OWASP WSTG WSTG-CONF: 06-Test HTTP Methods",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_06-Test_HTTP_Methods.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/06-Test_HTTP_Methods.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-conf-07-test_http_strict_transport_security",
+      "title": "OWASP WSTG WSTG-CONF: 07-Test HTTP Strict Transport Security",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_07-Test_HTTP_Strict_Transport_Security.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/07-Test_HTTP_Strict_Transport_Security.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-conf-08-test_ria_cross_domain_policy",
+      "title": "OWASP WSTG WSTG-CONF: 08-Test RIA Cross Domain Policy",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_08-Test_RIA_Cross_Domain_Policy.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/08-Test_RIA_Cross_Domain_Policy.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-conf-09-test_file_permission",
+      "title": "OWASP WSTG WSTG-CONF: 09-Test File Permission",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_09-Test_File_Permission.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/09-Test_File_Permission.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-conf-10-test_for_subdomain_takeover",
+      "title": "OWASP WSTG WSTG-CONF: 10-Test for Subdomain Takeover",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_10-Test_for_Subdomain_Takeover.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/10-Test_for_Subdomain_Takeover.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-conf-11-test_cloud_storage",
+      "title": "OWASP WSTG WSTG-CONF: 11-Test Cloud Storage",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_11-Test_Cloud_Storage.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/11-Test_Cloud_Storage.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-conf-12-test_for_content_security_policy",
+      "title": "OWASP WSTG WSTG-CONF: 12-Test for Content Security Policy",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_12-Test_for_Content_Security_Policy.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/12-Test_for_Content_Security_Policy.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-conf-13-test_for_path_confusion",
+      "title": "OWASP WSTG WSTG-CONF: 13-Test for Path Confusion",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_13-Test_for_Path_Confusion.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/13-Test_for_Path_Confusion.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-conf-14-test_other_http_security_header_misconfigurations",
+      "title": "OWASP WSTG WSTG-CONF: 14-Test Other HTTP Security Header Misconfigurations",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CONF_14-Test_Other_HTTP_Security_Header_Misconfigurations.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/14-Test_Other_HTTP_Security_Header_Misconfigurations.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-idnt-01-test_role_definitions",
+      "title": "OWASP WSTG WSTG-IDNT: 01-Test Role Definitions",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-IDNT_01-Test_Role_Definitions.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/03-Identity_Management_Testing/01-Test_Role_Definitions.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-idnt-02-test_user_registration_process",
+      "title": "OWASP WSTG WSTG-IDNT: 02-Test User Registration Process",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-IDNT_02-Test_User_Registration_Process.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/03-Identity_Management_Testing/02-Test_User_Registration_Process.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-idnt-03-test_account_provisioning_process",
+      "title": "OWASP WSTG WSTG-IDNT: 03-Test Account Provisioning Process",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-IDNT_03-Test_Account_Provisioning_Process.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/03-Identity_Management_Testing/03-Test_Account_Provisioning_Process.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-idnt-04-testing_for_account_enumeration_and_guessable_user_account",
+      "title": "OWASP WSTG WSTG-IDNT: 04-Testing for Account Enumeration and Guessable User Account",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-IDNT_04-Testing_for_Account_Enumeration_and_Guessable_User_Account.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/03-Identity_Management_Testing/04-Testing_for_Account_Enumeration_and_Guessable_User_Account.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-idnt-05-testing_for_weak_or_unenforced_username_policy",
+      "title": "OWASP WSTG WSTG-IDNT: 05-Testing for Weak or Unenforced Username Policy",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-IDNT_05-Testing_for_Weak_or_Unenforced_Username_Policy.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/03-Identity_Management_Testing/05-Testing_for_Weak_or_Unenforced_Username_Policy.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athn-01-testing_for_credentials_transported_over_an_encrypted_channel",
+      "title": "OWASP WSTG WSTG-ATHN: 01-Testing for Credentials Transported over an Encrypted Channel",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHN_01-Testing_for_Credentials_Transported_over_an_Encrypted_Channel.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/01-Testing_for_Credentials_Transported_over_an_Encrypted_Channel.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athn-02-testing_for_default_credentials",
+      "title": "OWASP WSTG WSTG-ATHN: 02-Testing for Default Credentials",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHN_02-Testing_for_Default_Credentials.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/02-Testing_for_Default_Credentials.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athn-03-testing_for_weak_lock_out_mechanism",
+      "title": "OWASP WSTG WSTG-ATHN: 03-Testing for Weak Lock Out Mechanism",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHN_03-Testing_for_Weak_Lock_Out_Mechanism.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/03-Testing_for_Weak_Lock_Out_Mechanism.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athn-04-testing_for_bypassing_authentication_schema",
+      "title": "OWASP WSTG WSTG-ATHN: 04-Testing for Bypassing Authentication Schema",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHN_04-Testing_for_Bypassing_Authentication_Schema.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/04-Testing_for_Bypassing_Authentication_Schema.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athn-05-testing_for_vulnerable_remember_password",
+      "title": "OWASP WSTG WSTG-ATHN: 05-Testing for Vulnerable Remember Password",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHN_05-Testing_for_Vulnerable_Remember_Password.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/05-Testing_for_Vulnerable_Remember_Password.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athn-06-testing_for_browser_cache_weaknesses",
+      "title": "OWASP WSTG WSTG-ATHN: 06-Testing for Browser Cache Weaknesses",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHN_06-Testing_for_Browser_Cache_Weaknesses.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/06-Testing_for_Browser_Cache_Weaknesses.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athn-07-testing_for_weak_authentication_methods",
+      "title": "OWASP WSTG WSTG-ATHN: 07-Testing for Weak Authentication Methods",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHN_07-Testing_for_Weak_Authentication_Methods.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/07-Testing_for_Weak_Authentication_Methods.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athn-08-testing_for_weak_security_question_answer",
+      "title": "OWASP WSTG WSTG-ATHN: 08-Testing for Weak Security Question Answer",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHN_08-Testing_for_Weak_Security_Question_Answer.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/08-Testing_for_Weak_Security_Question_Answer.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athn-09-testing_for_weak_password_change_or_reset_functionalities",
+      "title": "OWASP WSTG WSTG-ATHN: 09-Testing for Weak Password Change or Reset Functionalities",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHN_09-Testing_for_Weak_Password_Change_or_Reset_Functionalities.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/09-Testing_for_Weak_Password_Change_or_Reset_Functionalities.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athn-10-testing_for_weaker_authentication_in_alternative_channel",
+      "title": "OWASP WSTG WSTG-ATHN: 10-Testing for Weaker Authentication in Alternative Channel",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHN_10-Testing_for_Weaker_Authentication_in_Alternative_Channel.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/10-Testing_for_Weaker_Authentication_in_Alternative_Channel.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athn-11-testing_multi-factor_authentication",
+      "title": "OWASP WSTG WSTG-ATHN: 11-Testing Multi-Factor Authentication",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHN_11-Testing_Multi-Factor_Authentication.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/04-Authentication_Testing/11-Testing_Multi-Factor_Authentication.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athz-01-testing_directory_traversal_file_include",
+      "title": "OWASP WSTG WSTG-ATHZ: 01-Testing Directory Traversal File Include",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHZ_01-Testing_Directory_Traversal_File_Include.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/05-Authorization_Testing/01-Testing_Directory_Traversal_File_Include.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athz-02-testing_for_bypassing_authorization_schema",
+      "title": "OWASP WSTG WSTG-ATHZ: 02-Testing for Bypassing Authorization Schema",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHZ_02-Testing_for_Bypassing_Authorization_Schema.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/05-Authorization_Testing/02-Testing_for_Bypassing_Authorization_Schema.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athz-03-testing_for_privilege_escalation",
+      "title": "OWASP WSTG WSTG-ATHZ: 03-Testing for Privilege Escalation",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHZ_03-Testing_for_Privilege_Escalation.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/05-Authorization_Testing/03-Testing_for_Privilege_Escalation.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athz-04-testing_for_insecure_direct_object_references",
+      "title": "OWASP WSTG WSTG-ATHZ: 04-Testing for Insecure Direct Object References",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHZ_04-Testing_for_Insecure_Direct_Object_References.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/05-Authorization_Testing/04-Testing_for_Insecure_Direct_Object_References.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athz-05-testing_for_oauth_weaknesses",
+      "title": "OWASP WSTG WSTG-ATHZ: 05-Testing for OAuth Weaknesses",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHZ_05-Testing_for_OAuth_Weaknesses.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/05-Authorization_Testing/05-Testing_for_OAuth_Weaknesses.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athz-05.1-testing_for_oauth_authorization_server_weaknesses",
+      "title": "OWASP WSTG WSTG-ATHZ: 05.1-Testing for OAuth Authorization Server Weaknesses",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHZ_05.1-Testing_for_OAuth_Authorization_Server_Weaknesses.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/05-Authorization_Testing/05.1-Testing_for_OAuth_Authorization_Server_Weaknesses.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-athz-05.2-testing_for_oauth_client_weaknesses",
+      "title": "OWASP WSTG WSTG-ATHZ: 05.2-Testing for OAuth Client Weaknesses",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ATHZ_05.2-Testing_for_OAuth_Client_Weaknesses.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/05-Authorization_Testing/05.2-Testing_for_OAuth_Client_Weaknesses.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-sess-01-testing_for_session_management_schema",
+      "title": "OWASP WSTG WSTG-SESS: 01-Testing for Session Management Schema",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-SESS_01-Testing_for_Session_Management_Schema.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/01-Testing_for_Session_Management_Schema.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-sess-02-testing_for_cookies_attributes",
+      "title": "OWASP WSTG WSTG-SESS: 02-Testing for Cookies Attributes",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-SESS_02-Testing_for_Cookies_Attributes.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/02-Testing_for_Cookies_Attributes.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-sess-03-testing_for_session_fixation",
+      "title": "OWASP WSTG WSTG-SESS: 03-Testing for Session Fixation",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-SESS_03-Testing_for_Session_Fixation.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/03-Testing_for_Session_Fixation.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-sess-04-testing_for_exposed_session_variables",
+      "title": "OWASP WSTG WSTG-SESS: 04-Testing for Exposed Session Variables",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-SESS_04-Testing_for_Exposed_Session_Variables.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/04-Testing_for_Exposed_Session_Variables.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-sess-05-testing_for_cross_site_request_forgery",
+      "title": "OWASP WSTG WSTG-SESS: 05-Testing for Cross Site Request Forgery",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-SESS_05-Testing_for_Cross_Site_Request_Forgery.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/05-Testing_for_Cross_Site_Request_Forgery.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-sess-06-testing_for_logout_functionality",
+      "title": "OWASP WSTG WSTG-SESS: 06-Testing for Logout Functionality",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-SESS_06-Testing_for_Logout_Functionality.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/06-Testing_for_Logout_Functionality.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-sess-07-testing_session_timeout",
+      "title": "OWASP WSTG WSTG-SESS: 07-Testing Session Timeout",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-SESS_07-Testing_Session_Timeout.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/07-Testing_Session_Timeout.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-sess-08-testing_for_session_puzzling",
+      "title": "OWASP WSTG WSTG-SESS: 08-Testing for Session Puzzling",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-SESS_08-Testing_for_Session_Puzzling.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/08-Testing_for_Session_Puzzling.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-sess-09-testing_for_session_hijacking",
+      "title": "OWASP WSTG WSTG-SESS: 09-Testing for Session Hijacking",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-SESS_09-Testing_for_Session_Hijacking.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/09-Testing_for_Session_Hijacking.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-sess-10-testing_json_web_tokens",
+      "title": "OWASP WSTG WSTG-SESS: 10-Testing JSON Web Tokens",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-SESS_10-Testing_JSON_Web_Tokens.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/10-Testing_JSON_Web_Tokens.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-sess-11-testing_for_concurrent_sessions",
+      "title": "OWASP WSTG WSTG-SESS: 11-Testing for Concurrent Sessions",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-SESS_11-Testing_for_Concurrent_Sessions.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/06-Session_Management_Testing/11-Testing_for_Concurrent_Sessions.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-01-testing_for_reflected_cross_site_scripting",
+      "title": "OWASP WSTG WSTG-INPV: 01-Testing for Reflected Cross Site Scripting",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_01-Testing_for_Reflected_Cross_Site_Scripting.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/01-Testing_for_Reflected_Cross_Site_Scripting.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-02-testing_for_stored_cross_site_scripting",
+      "title": "OWASP WSTG WSTG-INPV: 02-Testing for Stored Cross Site Scripting",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_02-Testing_for_Stored_Cross_Site_Scripting.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/02-Testing_for_Stored_Cross_Site_Scripting.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-03-testing_for_http_verb_tampering",
+      "title": "OWASP WSTG WSTG-INPV: 03-Testing for HTTP Verb Tampering",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_03-Testing_for_HTTP_Verb_Tampering.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/03-Testing_for_HTTP_Verb_Tampering.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-04-testing_for_http_parameter_pollution",
+      "title": "OWASP WSTG WSTG-INPV: 04-Testing for HTTP Parameter Pollution",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_04-Testing_for_HTTP_Parameter_Pollution.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/04-Testing_for_HTTP_Parameter_Pollution.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-05-testing_for_sql_injection",
+      "title": "OWASP WSTG WSTG-INPV: 05-Testing for SQL Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_05-Testing_for_SQL_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05-Testing_for_SQL_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-05.1-testing_for_oracle",
+      "title": "OWASP WSTG WSTG-INPV: 05.1-Testing for Oracle",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_05.1-Testing_for_Oracle.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05.1-Testing_for_Oracle.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-05.2-testing_for_mysql",
+      "title": "OWASP WSTG WSTG-INPV: 05.2-Testing for MySQL",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_05.2-Testing_for_MySQL.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05.2-Testing_for_MySQL.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-05.3-testing_for_sql_server",
+      "title": "OWASP WSTG WSTG-INPV: 05.3-Testing for SQL Server",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_05.3-Testing_for_SQL_Server.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05.3-Testing_for_SQL_Server.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-05.4-testing_postgresql",
+      "title": "OWASP WSTG WSTG-INPV: 05.4-Testing PostgreSQL",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_05.4-Testing_PostgreSQL.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05.4-Testing_PostgreSQL.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-05.5-testing_for_ms_access",
+      "title": "OWASP WSTG WSTG-INPV: 05.5-Testing for MS Access",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_05.5-Testing_for_MS_Access.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05.5-Testing_for_MS_Access.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-05.6-testing_for_nosql_injection",
+      "title": "OWASP WSTG WSTG-INPV: 05.6-Testing for NoSQL Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_05.6-Testing_for_NoSQL_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05.6-Testing_for_NoSQL_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-05.7-testing_for_orm_injection",
+      "title": "OWASP WSTG WSTG-INPV: 05.7-Testing for ORM Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_05.7-Testing_for_ORM_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05.7-Testing_for_ORM_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-05.8-testing_for_client-side",
+      "title": "OWASP WSTG WSTG-INPV: 05.8-Testing for Client-side",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_05.8-Testing_for_Client-side.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05.8-Testing_for_Client-side.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-06-testing_for_ldap_injection",
+      "title": "OWASP WSTG WSTG-INPV: 06-Testing for LDAP Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_06-Testing_for_LDAP_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/06-Testing_for_LDAP_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-07-testing_for_xml_injection",
+      "title": "OWASP WSTG WSTG-INPV: 07-Testing for XML Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_07-Testing_for_XML_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/07-Testing_for_XML_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-08-testing_for_ssi_injection",
+      "title": "OWASP WSTG WSTG-INPV: 08-Testing for SSI Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_08-Testing_for_SSI_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/08-Testing_for_SSI_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-09-testing_for_xpath_injection",
+      "title": "OWASP WSTG WSTG-INPV: 09-Testing for XPath Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_09-Testing_for_XPath_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/09-Testing_for_XPath_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-10-testing_for_imap_smtp_injection",
+      "title": "OWASP WSTG WSTG-INPV: 10-Testing for IMAP SMTP Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_10-Testing_for_IMAP_SMTP_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/10-Testing_for_IMAP_SMTP_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-11-testing_for_code_injection",
+      "title": "OWASP WSTG WSTG-INPV: 11-Testing for Code Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_11-Testing_for_Code_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/11-Testing_for_Code_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-11.1-testing_for_file_inclusion",
+      "title": "OWASP WSTG WSTG-INPV: 11.1-Testing for File Inclusion",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_11.1-Testing_for_File_Inclusion.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/11.1-Testing_for_File_Inclusion.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-12-testing_for_command_injection",
+      "title": "OWASP WSTG WSTG-INPV: 12-Testing for Command Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_12-Testing_for_Command_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/12-Testing_for_Command_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-13-testing_for_buffer_overflow",
+      "title": "OWASP WSTG WSTG-INPV: 13-Testing for Buffer Overflow",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_13-Testing_for_Buffer_Overflow.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/13-Testing_for_Buffer_Overflow.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-13-testing_for_format_string_injection",
+      "title": "OWASP WSTG WSTG-INPV: 13-Testing for Format String Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_13-Testing_for_Format_String_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/13-Testing_for_Format_String_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-14-testing_for_incubated_vulnerability",
+      "title": "OWASP WSTG WSTG-INPV: 14-Testing for Incubated Vulnerability",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_14-Testing_for_Incubated_Vulnerability.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/14-Testing_for_Incubated_Vulnerability.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-15-testing_for_http_response_splitting",
+      "title": "OWASP WSTG WSTG-INPV: 15-Testing for HTTP Response Splitting",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_15-Testing_for_HTTP_Response_Splitting.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/15-Testing_for_HTTP_Response_Splitting.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-16-testing_for_http_request_smuggling",
+      "title": "OWASP WSTG WSTG-INPV: 16-Testing for HTTP Request Smuggling",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_16-Testing_for_HTTP_Request_Smuggling.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/16-Testing_for_HTTP_Request_Smuggling.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-17-testing_for_host_header_injection",
+      "title": "OWASP WSTG WSTG-INPV: 17-Testing for Host Header Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_17-Testing_for_Host_Header_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/17-Testing_for_Host_Header_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-18-testing_for_server-side_template_injection",
+      "title": "OWASP WSTG WSTG-INPV: 18-Testing for Server-side Template Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_18-Testing_for_Server-side_Template_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/18-Testing_for_Server-side_Template_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-19-testing_for_server-side_request_forgery",
+      "title": "OWASP WSTG WSTG-INPV: 19-Testing for Server-Side Request Forgery",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_19-Testing_for_Server-Side_Request_Forgery.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/19-Testing_for_Server-Side_Request_Forgery.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-20-testing_for_mass_assignment",
+      "title": "OWASP WSTG WSTG-INPV: 20-Testing for Mass Assignment",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_20-Testing_for_Mass_Assignment.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/20-Testing_for_Mass_Assignment.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-inpv-21-testing_for_csv_injection",
+      "title": "OWASP WSTG WSTG-INPV: 21-Testing for CSV Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-INPV_21-Testing_for_CSV_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/21-Testing_for_CSV_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-errh-01-testing_for_improper_error_handling",
+      "title": "OWASP WSTG WSTG-ERRH: 01-Testing For Improper Error Handling",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ERRH_01-Testing_For_Improper_Error_Handling.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/08-Testing_for_Error_Handling/01-Testing_For_Improper_Error_Handling.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-errh-02-testing_for_stack_traces",
+      "title": "OWASP WSTG WSTG-ERRH: 02-Testing for Stack Traces",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-ERRH_02-Testing_for_Stack_Traces.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/08-Testing_for_Error_Handling/02-Testing_for_Stack_Traces.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-cryp-01-testing_for_weak_transport_layer_security",
+      "title": "OWASP WSTG WSTG-CRYP: 01-Testing for Weak Transport Layer Security",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CRYP_01-Testing_for_Weak_Transport_Layer_Security.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/09-Testing_for_Weak_Cryptography/01-Testing_for_Weak_Transport_Layer_Security.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-cryp-02-testing_for_padding_oracle",
+      "title": "OWASP WSTG WSTG-CRYP: 02-Testing for Padding Oracle",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CRYP_02-Testing_for_Padding_Oracle.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/09-Testing_for_Weak_Cryptography/02-Testing_for_Padding_Oracle.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-cryp-03-testing_for_sensitive_information_sent_via_unencrypted_channels",
+      "title": "OWASP WSTG WSTG-CRYP: 03-Testing for Sensitive Information Sent via Unencrypted Channels",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CRYP_03-Testing_for_Sensitive_Information_Sent_via_Unencrypted_Channels.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/09-Testing_for_Weak_Cryptography/03-Testing_for_Sensitive_Information_Sent_via_Unencrypted_Channels.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-cryp-04-testing_for_weak_cryptographic_primitives",
+      "title": "OWASP WSTG WSTG-CRYP: 04-Testing for Weak Cryptographic Primitives",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CRYP_04-Testing_for_Weak_Cryptographic_Primitives.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/09-Testing_for_Weak_Cryptography/04-Testing_for_Weak_Cryptographic_Primitives.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-busl-00-introduction_to_business_logic",
+      "title": "OWASP WSTG WSTG-BUSL: 00-Introduction to Business Logic",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-BUSL_00-Introduction_to_Business_Logic.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/00-Introduction_to_Business_Logic.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-busl-01-test_business_logic_data_validation",
+      "title": "OWASP WSTG WSTG-BUSL: 01-Test Business Logic Data Validation",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-BUSL_01-Test_Business_Logic_Data_Validation.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/01-Test_Business_Logic_Data_Validation.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-busl-02-test_ability_to_forge_requests",
+      "title": "OWASP WSTG WSTG-BUSL: 02-Test Ability to Forge Requests",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-BUSL_02-Test_Ability_to_Forge_Requests.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/02-Test_Ability_to_Forge_Requests.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-busl-03-test_integrity_checks",
+      "title": "OWASP WSTG WSTG-BUSL: 03-Test Integrity Checks",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-BUSL_03-Test_Integrity_Checks.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/03-Test_Integrity_Checks.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-busl-04-test_for_process_timing",
+      "title": "OWASP WSTG WSTG-BUSL: 04-Test for Process Timing",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-BUSL_04-Test_for_Process_Timing.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/04-Test_for_Process_Timing.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-busl-05-test_number_of_times_a_function_can_be_used_limits",
+      "title": "OWASP WSTG WSTG-BUSL: 05-Test Number of Times a Function Can Be Used Limits",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-BUSL_05-Test_Number_of_Times_a_Function_Can_Be_Used_Limits.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/05-Test_Number_of_Times_a_Function_Can_Be_Used_Limits.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-busl-06-testing_for_the_circumvention_of_work_flows",
+      "title": "OWASP WSTG WSTG-BUSL: 06-Testing for the Circumvention of Work Flows",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-BUSL_06-Testing_for_the_Circumvention_of_Work_Flows.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/06-Testing_for_the_Circumvention_of_Work_Flows.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-busl-07-test_defenses_against_application_misuse",
+      "title": "OWASP WSTG WSTG-BUSL: 07-Test Defenses Against Application Misuse",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-BUSL_07-Test_Defenses_Against_Application_Misuse.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/07-Test_Defenses_Against_Application_Misuse.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-busl-08-test_upload_of_unexpected_file_types",
+      "title": "OWASP WSTG WSTG-BUSL: 08-Test Upload of Unexpected File Types",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-BUSL_08-Test_Upload_of_Unexpected_File_Types.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/08-Test_Upload_of_Unexpected_File_Types.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-busl-09-test_upload_of_malicious_files",
+      "title": "OWASP WSTG WSTG-BUSL: 09-Test Upload of Malicious Files",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-BUSL_09-Test_Upload_of_Malicious_Files.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/09-Test_Upload_of_Malicious_Files.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-busl-10-test-payment-functionality",
+      "title": "OWASP WSTG WSTG-BUSL: 10-Test-Payment-Functionality",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-BUSL_10-Test-Payment-Functionality.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/10-Business_Logic_Testing/10-Test-Payment-Functionality.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-01-testing_for_dom-based_cross_site_scripting",
+      "title": "OWASP WSTG WSTG-CLNT: 01-Testing for DOM-based Cross Site Scripting",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_01-Testing_for_DOM-based_Cross_Site_Scripting.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/01-Testing_for_DOM-based_Cross_Site_Scripting.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-01.1-testing_for_self_dom_based_cross_site_scripting",
+      "title": "OWASP WSTG WSTG-CLNT: 01.1-Testing for Self DOM Based Cross Site Scripting",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_01.1-Testing_for_Self_DOM_Based_Cross_Site_Scripting.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/01.1-Testing_for_Self_DOM_Based_Cross_Site_Scripting.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-02-testing_for_javascript_execution",
+      "title": "OWASP WSTG WSTG-CLNT: 02-Testing for JavaScript Execution",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_02-Testing_for_JavaScript_Execution.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/02-Testing_for_JavaScript_Execution.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-03-testing_for_html_injection",
+      "title": "OWASP WSTG WSTG-CLNT: 03-Testing for HTML Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_03-Testing_for_HTML_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/03-Testing_for_HTML_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-04-testing_for_client-side_url_redirect",
+      "title": "OWASP WSTG WSTG-CLNT: 04-Testing for Client-side URL Redirect",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_04-Testing_for_Client-side_URL_Redirect.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/04-Testing_for_Client-side_URL_Redirect.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-05-testing_for_css_injection",
+      "title": "OWASP WSTG WSTG-CLNT: 05-Testing for CSS Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_05-Testing_for_CSS_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/05-Testing_for_CSS_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-06-testing_for_client-side_resource_manipulation",
+      "title": "OWASP WSTG WSTG-CLNT: 06-Testing for Client-side Resource Manipulation",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_06-Testing_for_Client-side_Resource_Manipulation.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/06-Testing_for_Client-side_Resource_Manipulation.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-07-testing_cross_origin_resource_sharing",
+      "title": "OWASP WSTG WSTG-CLNT: 07-Testing Cross Origin Resource Sharing",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_07-Testing_Cross_Origin_Resource_Sharing.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/07-Testing_Cross_Origin_Resource_Sharing.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-08-testing_for_cross_site_flashing",
+      "title": "OWASP WSTG WSTG-CLNT: 08-Testing for Cross Site Flashing",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_08-Testing_for_Cross_Site_Flashing.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/08-Testing_for_Cross_Site_Flashing.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-09-testing_for_clickjacking",
+      "title": "OWASP WSTG WSTG-CLNT: 09-Testing for Clickjacking",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_09-Testing_for_Clickjacking.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/09-Testing_for_Clickjacking.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-10-testing_websockets",
+      "title": "OWASP WSTG WSTG-CLNT: 10-Testing WebSockets",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_10-Testing_WebSockets.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/10-Testing_WebSockets.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-11-testing_web_messaging",
+      "title": "OWASP WSTG WSTG-CLNT: 11-Testing Web Messaging",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_11-Testing_Web_Messaging.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/11-Testing_Web_Messaging.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-12-testing_browser_storage",
+      "title": "OWASP WSTG WSTG-CLNT: 12-Testing Browser Storage",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_12-Testing_Browser_Storage.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/12-Testing_Browser_Storage.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-13-testing_for_cross_site_script_inclusion",
+      "title": "OWASP WSTG WSTG-CLNT: 13-Testing for Cross Site Script Inclusion",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_13-Testing_for_Cross_Site_Script_Inclusion.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/13-Testing_for_Cross_Site_Script_Inclusion.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-14-testing_for_reverse_tabnabbing",
+      "title": "OWASP WSTG WSTG-CLNT: 14-Testing for Reverse Tabnabbing",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_14-Testing_for_Reverse_Tabnabbing.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/14-Testing_for_Reverse_Tabnabbing.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-clnt-15-testing_for_client-side_template_injection",
+      "title": "OWASP WSTG WSTG-CLNT: 15-Testing for Client-Side Template Injection",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-CLNT_15-Testing_for_Client-Side_Template_Injection.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/11-Client-side_Testing/15-Testing_for_Client-Side_Template_Injection.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-apit-00-api_testing_overview",
+      "title": "OWASP WSTG WSTG-APIT: 00-API Testing Overview",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-APIT_00-API_Testing_Overview.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/12-API_Testing/00-API_Testing_Overview.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-apit-01-api_reconnaissance",
+      "title": "OWASP WSTG WSTG-APIT: 01-API Reconnaissance",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-APIT_01-API_Reconnaissance.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/12-API_Testing/01-API_Reconnaissance.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-apit-02-api_broken_object_level_authorization",
+      "title": "OWASP WSTG WSTG-APIT: 02-API Broken Object Level Authorization",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-APIT_02-API_Broken_Object_Level_Authorization.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/12-API_Testing/02-API_Broken_Object_Level_Authorization.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-apit-03-testing_for_excessive_data_exposure",
+      "title": "OWASP WSTG WSTG-APIT: 03-Testing for Excessive Data Exposure",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-APIT_03-Testing_for_Excessive_Data_Exposure.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/12-API_Testing/03-Testing_for_Excessive_Data_Exposure.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "owasp-wstg-wstg-apit-99-testing_graphql",
+      "title": "OWASP WSTG WSTG-APIT: 99-Testing GraphQL",
+      "framework": "owasp",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/owasp-wstg/WSTG-APIT_99-Testing_GraphQL.md",
+      "origin": "https://raw.githubusercontent.com/OWASP/wstg/master/document/4-Web_Application_Security_Testing/12-API_Testing/99-Testing_GraphQL.md",
       "ingestion_status": "discovered"
     },
     {
@@ -573,6 +1743,26 @@
       "ingestion_status": "discovered"
     },
     {
+      "id": "kali-pacu",
+      "title": "Kali Tools - pacu",
+      "framework": "kali",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/kali-tools/pacu.md",
+      "origin": "https://www.kali.org/tools/pacu/",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "kali-trufflehog",
+      "title": "Kali Tools - trufflehog",
+      "framework": "kali",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/kali-tools/trufflehog.md",
+      "origin": "https://www.kali.org/tools/trufflehog/",
+      "ingestion_status": "discovered"
+    },
+    {
       "id": "hacktricks-pentesting-network",
       "title": "HackTricks - Pentesting Network",
       "framework": "hacktricks",
@@ -800,6 +1990,246 @@
       "language": "en",
       "path": "data/raw/hacktricks/pentesting-mssql.md",
       "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks/master/src/network-services-pentesting/pentesting-mssql-microsoft-sql-server/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-cloud-methodology",
+      "title": "HackTricks Cloud - Cloud Methodology",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/cloud-methodology.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/pentesting-cloud-methodology.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-aws-pentesting",
+      "title": "HackTricks Cloud - Aws Pentesting",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/aws-pentesting.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/aws-security/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-aws-privilege-escalation",
+      "title": "HackTricks Cloud - Aws Privilege Escalation",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/aws-privilege-escalation.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/aws-security/aws-privilege-escalation/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-aws-unauthenticated-enum",
+      "title": "HackTricks Cloud - Aws Unauthenticated Enum",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/aws-unauthenticated-enum.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/aws-security/aws-unauthenticated-enum-access/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-aws-basic-information",
+      "title": "HackTricks Cloud - Aws Basic Information",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/aws-basic-information.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/aws-security/aws-basic-information/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-azure-pentesting",
+      "title": "HackTricks Cloud - Azure Pentesting",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/azure-pentesting.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/azure-security/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-azure-persistence",
+      "title": "HackTricks Cloud - Azure Persistence",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/azure-persistence.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/azure-security/az-persistence/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-azure-post-exploitation",
+      "title": "HackTricks Cloud - Azure Post Exploitation",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/azure-post-exploitation.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/azure-security/az-post-exploitation/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-azure-unauthenticated-enum",
+      "title": "HackTricks Cloud - Azure Unauthenticated Enum",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/azure-unauthenticated-enum.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/azure-security/az-unauthenticated-enum-and-initial-entry/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-azure-enumeration-tools",
+      "title": "HackTricks Cloud - Azure Enumeration Tools",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/azure-enumeration-tools.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/azure-security/az-enumeration-tools.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-gcp-pentesting",
+      "title": "HackTricks Cloud - Gcp Pentesting",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/gcp-pentesting.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/gcp-security/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-gcp-privilege-escalation",
+      "title": "HackTricks Cloud - Gcp Privilege Escalation",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/gcp-privilege-escalation.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/gcp-security/gcp-privilege-escalation/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-gcp-unauthenticated-enum",
+      "title": "HackTricks Cloud - Gcp Unauthenticated Enum",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/gcp-unauthenticated-enum.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/gcp-security/gcp-unauthenticated-enum-and-access/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-kubernetes-pentesting",
+      "title": "HackTricks Cloud - Kubernetes Pentesting",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/kubernetes-pentesting.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/kubernetes-security/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-kubernetes-enumeration",
+      "title": "HackTricks Cloud - Kubernetes Enumeration",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/kubernetes-enumeration.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/kubernetes-security/kubernetes-enumeration.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-kubernetes-network-attacks",
+      "title": "HackTricks Cloud - Kubernetes Network Attacks",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/kubernetes-network-attacks.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/kubernetes-security/kubernetes-network-attacks.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-kubernetes-rbac",
+      "title": "HackTricks Cloud - Kubernetes Rbac",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/kubernetes-rbac.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/kubernetes-security/kubernetes-role-based-access-control-rbac.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-kubernetes-abusing-roles",
+      "title": "HackTricks Cloud - Kubernetes Abusing Roles",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/kubernetes-abusing-roles.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/kubernetes-security/abusing-roles-clusterroles-in-kubernetes/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-kubernetes-attacking-from-pod",
+      "title": "HackTricks Cloud - Kubernetes Attacking From Pod",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/kubernetes-attacking-from-pod.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/kubernetes-security/attacking-kubernetes-from-inside-a-pod.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-kubernetes-pivoting-to-clouds",
+      "title": "HackTricks Cloud - Kubernetes Pivoting To Clouds",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/kubernetes-pivoting-to-clouds.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-cloud/kubernetes-security/kubernetes-pivoting-to-clouds.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-cicd-methodology",
+      "title": "HackTricks Cloud - Cicd Methodology",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/cicd-methodology.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-ci-cd/pentesting-ci-cd-methodology.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-github-security",
+      "title": "HackTricks Cloud - Github Security",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/github-security.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-ci-cd/github-security/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-jenkins-security",
+      "title": "HackTricks Cloud - Jenkins Security",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/jenkins-security.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-ci-cd/jenkins-security/README.md",
+      "ingestion_status": "discovered"
+    },
+    {
+      "id": "hacktricks-cloud-terraform-security",
+      "title": "HackTricks Cloud - Terraform Security",
+      "framework": "hacktricks-cloud",
+      "source_type": "markdown",
+      "language": "en",
+      "path": "data/raw/hacktricks-cloud/terraform-security.md",
+      "origin": "https://raw.githubusercontent.com/HackTricks-wiki/hacktricks-cloud/master/src/pentesting-ci-cd/terraform-security.md",
       "ingestion_status": "discovered"
     }
   ]
