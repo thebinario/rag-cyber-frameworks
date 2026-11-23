@@ -1,0 +1,158 @@
+from __future__ import annotations
+
+import sys
+import unittest
+from pathlib import Path
+from unittest import mock
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from app.writeups import analyzer, query_rewrite
+
+
+class FakeGenerator:
+    model = "fake"
+
+    def __init__(self, reply: str = "", fail: bool = False) -> None:
+        self.reply = reply
+        self.fail = fail
+        self.prompts: list[str] = []
+
+    def generate(self, prompt, options=None, response_format=None):
+        self.prompts.append(prompt)
+        if self.fail:
+            raise RuntimeError("ollama down")
+        return self.reply
+
+
+IDOR = {"writeup_id": "idor", "title": "IDOR in orders", "vuln_class": "IDOR"}
+XSS = {"writeup_id": "xss", "title": "XSS in admin", "vuln_class": "XSS"}
+
+
+class RewriteScenarioTests(unittest.TestCase):
+    def test_returns_clean_english_query(self):
+        client = FakeGenerator('<think>x</think>SEARCH QUERY: "GraphQL mutation accepts foreign orderId. Possible classes: IDOR."')
+        self.assertEqual(
+            query_rewrite.rewrite_scenario("mutation aceita orderId de outro usuário", client),
+            "GraphQL mutation accepts foreign orderId. Possible classes: IDOR.",
+        )
+
+    def test_prompt_keeps_original_scenario_and_forbids_new_facts(self):
+        client = FakeGenerator("q")
+        query_rewrite.rewrite_scenario("orderId de outro usuário", client)
+        self.assertIn("orderId de outro usuário", client.prompts[0])
+        self.assertIn("Do not add facts", client.prompts[0])
+
+    def test_failure_falls_back_to_empty(self):
+        self.assertEqual(query_rewrite.rewrite_scenario("x", FakeGenerator(fail=True)), "")
+
+    def test_can_be_disabled(self):
+        client = FakeGenerator("rewritten")
+        with mock.patch.dict("os.environ", {"WRITEUPS_QUERY_REWRITE": "off"}):
+            self.assertEqual(query_rewrite.rewrite_scenario("x", client), "")
+        self.assertEqual(client.prompts, [])
+
+    def test_output_is_length_limited(self):
+        long_reply = "word " * 1000
+        self.assertLessEqual(len(query_rewrite.rewrite_scenario("x", FakeGenerator(long_reply))), query_rewrite.MAX_REWRITE_CHARACTERS)
+
+
+class MergeMatchesTests(unittest.TestCase):
+    def test_keeps_best_distance_per_report_and_sorts(self):
+        merged = analyzer.merge_matches(
+            [[(XSS, 0.39), (IDOR, 0.42)], [(IDOR, 0.36), (XSS, 0.40)]],
+            top_k=5,
+        )
+        self.assertEqual([(r["writeup_id"], d) for r, d in merged], [("idor", 0.36), ("xss", 0.39)])
+
+    def test_respects_top_k(self):
+        merged = analyzer.merge_matches([[(XSS, 0.5), (IDOR, 0.4)]], top_k=1)
+        self.assertEqual(len(merged), 1)
+        self.assertEqual(merged[0][0]["writeup_id"], "idor")
+
+
+class ClassBonusTests(unittest.TestCase):
+    # Values observed on a real run: the IDOR report was 0.011 behind an unrelated XSS report.
+    QUERY = "GraphQL mutation updateOrder accepts another user's orderId and returns 200 Possible classes: IDOR, SSRF"
+    RESULTS = [[(XSS, 0.3707), (IDOR, 0.3818)]]
+
+    def test_parse_possible_classes(self):
+        self.assertEqual(analyzer.parse_possible_classes(self.QUERY), ["idor", "ssrf"])
+        self.assertEqual(
+            analyzer.parse_possible_classes("x. Possible classes: IDOR / broken object level authorization, SQL injection."),
+            ["idor", "broken object level authorization", "sql injection"],
+        )
+        self.assertEqual(analyzer.parse_possible_classes("no classes here"), [])
+        self.assertEqual(analyzer.parse_possible_classes(""), [])
+
+    def test_named_class_overtakes_a_slightly_closer_unrelated_report(self):
+        classes = analyzer.parse_possible_classes(self.QUERY)
+        merged = analyzer.merge_matches(self.RESULTS, top_k=2, classes=classes)
+        self.assertEqual([r["writeup_id"] for r, _ in merged], ["idor", "xss"])
+
+    def test_returned_distances_are_the_raw_ones(self):
+        merged = analyzer.merge_matches(self.RESULTS, top_k=2, classes=["idor"])
+        self.assertEqual(dict((r["writeup_id"], d) for r, d in merged), {"idor": 0.3818, "xss": 0.3707})
+
+    def test_bonus_does_not_beat_a_clearly_closer_report(self):
+        far_idor = [[(XSS, 0.30), (IDOR, 0.50)]]
+        merged = analyzer.merge_matches(far_idor, top_k=2, classes=["idor"])
+        self.assertEqual(merged[0][0]["writeup_id"], "xss")
+
+    def test_no_classes_keeps_plain_distance_order(self):
+        merged = analyzer.merge_matches(self.RESULTS, top_k=2, classes=[])
+        self.assertEqual(merged[0][0]["writeup_id"], "xss")
+
+    def test_bonus_can_be_disabled(self):
+        with mock.patch.dict("os.environ", {"WRITEUPS_CLASS_BONUS": "0"}):
+            merged = analyzer.merge_matches(self.RESULTS, top_k=2, classes=["idor"])
+        self.assertEqual(merged[0][0]["writeup_id"], "xss")
+
+    def test_invalid_bonus_falls_back_to_default(self):
+        with mock.patch.dict("os.environ", {"WRITEUPS_CLASS_BONUS": "abc"}):
+            self.assertEqual(analyzer.class_bonus(), analyzer.DEFAULT_CLASS_BONUS)
+
+    def test_class_match_is_not_a_substring_accident(self):
+        self.assertFalse(analyzer.report_matches_classes({"vuln_class": "XS"}, ["xss"]))
+        self.assertFalse(analyzer.report_matches_classes({"vuln_class": ""}, ["idor"]))
+        self.assertTrue(analyzer.report_matches_classes({"vuln_class": "SQL Injection"}, ["sql injection"]))
+
+
+class RetrieveSimilarTests(unittest.TestCase):
+    def _search(self, query, **kwargs):
+        # The original (Portuguese) query ranks XSS first; the English rewrite finds IDOR.
+        if "Possible classes" in query:
+            return [(IDOR, 0.36), (XSS, 0.41)]
+        return [(XSS, 0.39), (IDOR, 0.42)]
+
+    def test_rewrite_is_searched_too_and_best_distance_wins(self):
+        client = FakeGenerator("GraphQL foreign orderId. Possible classes: IDOR")
+        with mock.patch.object(analyzer, "search_writeups", side_effect=self._search) as search:
+            matches, used = analyzer.retrieve_similar("orderId de outro usuário", mock.Mock(), client, top_k=3)
+
+        self.assertEqual(search.call_count, 2)
+        self.assertEqual(matches[0][0]["writeup_id"], "idor")
+        self.assertEqual(matches[0][1], 0.36)
+        self.assertIn("Possible classes", used)
+
+    def test_rewrite_failure_still_searches_with_the_original(self):
+        with mock.patch.object(analyzer, "search_writeups", side_effect=self._search) as search:
+            matches, used = analyzer.retrieve_similar("orderId de outro usuário", mock.Mock(), FakeGenerator(fail=True))
+
+        self.assertEqual(search.call_count, 1)
+        self.assertEqual(used, "")
+        self.assertEqual(matches[0][0]["writeup_id"], "xss")
+
+    def test_analysis_prompt_uses_the_original_scenario_not_the_rewrite(self):
+        client = FakeGenerator("GraphQL foreign orderId. Possible classes: IDOR")
+        with mock.patch.object(analyzer, "search_writeups", side_effect=self._search):
+            analyzer.analyze_scenario("orderId de outro usuário", mock.Mock(), client)
+        analysis_prompt = client.prompts[-1]
+        self.assertIn("orderId de outro usuário", analysis_prompt)
+        self.assertNotIn("Possible classes: IDOR\n\nSIMILAR", analysis_prompt)
+
+
+if __name__ == "__main__":
+    unittest.main()

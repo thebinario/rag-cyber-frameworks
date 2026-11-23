@@ -8,7 +8,7 @@ from app.ingest.ollama_client import OllamaGenerationClient
 
 
 DEFAULT_OLLAMA_BASE_URL = "http://127.0.0.1:11434"
-DEFAULT_OLLAMA_GENERATE_MODEL = "qwen3.5:4b"
+DEFAULT_OLLAMA_GENERATE_MODEL = "qwen2.5:7b-instruct"
 DEFAULT_OLLAMA_TIMEOUT_SECONDS = 300
 INSUFFICIENT_EVIDENCE_MESSAGE = (
     "I do not have enough evidence in the retrieved context to answer that safely."

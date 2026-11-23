@@ -9,7 +9,7 @@ from app.ingest.ollama_client import OllamaGenerationClient
 
 WORD_PATTERN = re.compile(r"[a-z0-9]+")
 
-DEFAULT_REWRITER_MODEL = "qwen3.5:4b"
+DEFAULT_REWRITER_MODEL = "qwen2.5:7b-instruct"
 DEFAULT_REWRITER_BASE_URL = "http://127.0.0.1:11434"
 DEFAULT_REWRITER_TIMEOUT_SECONDS = 30
 DEFAULT_REWRITER_OPTIONS: dict[str, object] = {

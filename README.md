@@ -192,7 +192,7 @@ Optional environment variables:
 ```bash
 set OLLAMA_BASE_URL=http://127.0.0.1:11434
 set OLLAMA_EMBED_MODEL=nomic-embed-text
-set OLLAMA_GENERATE_MODEL=qwen3.5:4b
+set OLLAMA_GENERATE_MODEL=qwen2.5:7b-instruct
 set OLLAMA_EMBED_TIMEOUT_SECONDS=30
 set OLLAMA_GENERATE_TIMEOUT_SECONDS=300
 ```
@@ -281,7 +281,7 @@ python scripts/retrieve_context.py "how to use gobuster looking for subdomain" -
 Pull a local generation model:
 
 ```bash
-ollama pull qwen3.5:4b
+ollama pull qwen2.5:7b-instruct
 ```
 
 Run the full retrieval + generation flow:
@@ -319,6 +319,82 @@ python scripts/ask_rag.py "How to use gobuster looking for subdomain?" --top-k 3
 ```
 
 RAG will always be slower than asking the local model directly because it first embeds the query, searches the vector index, and builds a grounded prompt with retrieved evidence before generation.
+
+## Writeups and scenario analysis
+
+Besides the framework documents, the repository can index real security writeups/reports and use them to reason about a scenario. Everything runs locally through Ollama.
+
+```text
+writeup (.md/.txt/.html/.pdf)
+  -> structured extraction (JSON: vuln class, stack, entry point, root cause, technique, bypass, impact)
+  -> embedding of the structured fields -> Chroma collection "writeups"
+scenario -> retrieve similar writeups -> grounded reasoning prompt -> hypotheses + safe validation steps
+```
+
+Put writeups in `data/raw/writeups/` (ignored by Git: it is third-party material) and run:
+
+```bash
+python scripts/ingest_writeups.py            # extract + index; already indexed files are skipped
+python scripts/ingest_writeups.py --force    # re-extract everything
+
+python scripts/analyze_scenario.py "GraphQL API, mutation updateOrder accepts another user's orderId and returns 200"
+python scripts/analyze_scenario.py -f scenario.txt --top-k 5 --show-context
+```
+
+With `nomic-embed-text` the writeups are embedded with the `search_document: ` / `search_query: ` task prefixes the model was trained for. Each indexed entry records its `embedding_format`, so after upgrading, a plain `python scripts/ingest_writeups.py` re-extracts and re-indexes entries created without prefixes. Other embedding models are used without prefixes.
+
+Before searching, the local model rewrites the scenario as a short English query with likely vulnerability classes (the stored reports are in English, so scenarios written in Portuguese match poorly otherwise). Both the original text and the rewrite are searched and the best distance per report wins. The rewrite is used only for retrieval: the analysis prompt always receives your original scenario. A report whose vulnerability class the rewrite named ("Possible classes: ...") is ranked slightly higher: its distance is discounted by `WRITEUPS_CLASS_BONUS` (default `0.05`, `0` disables) only for ordering; the distances shown stay the raw ones. Set `WRITEUPS_QUERY_REWRITE=0` to turn the rewrite off; the API returns the query that was used as `retrieval_query`.
+
+The answer lists the reading of the scenario, analogies with stored reports, hypotheses (each tagged with the report it came from, or `general`), low-impact validation steps and what cannot be concluded yet. Use it only on targets you are authorized to test.
+
+Optional environment variables: `OLLAMA_EXTRACT_MODEL` (defaults to `OLLAMA_GENERATE_MODEL`), `OLLAMA_EXTRACT_TIMEOUT_SECONDS`, `WRITEUPS_WEAK_MATCH_DISTANCE` (default `0.45`: when even the closest report is farther than this, the context carries a weak-similarity warning and the answer is flagged as speculative). For an 8 GB GPU a 7B-8B model in Q4 (for example `qwen2.5:7b-instruct`) works well for extraction; a 4B model is enough to start.
+
+### Fetching HackerOne reports
+
+`scripts/fetch_writeups.py` downloads **publicly disclosed** HackerOne reports and saves each one as `data/raw/writeups/<id>.md`, ready for `ingest_writeups.py`. It reads the public `https://hackerone.com/reports/<id>.json` endpoint (the HTML page needs JavaScript, so it is not used).
+
+```bash
+python scripts/fetch_writeups.py 2119149 https://hackerone.com/reports/4175245
+python scripts/fetch_writeups.py --from-file report_ids.txt     # one id or URL per line, '#' comments allowed
+python scripts/ingest_writeups.py
+```
+
+- Only the ids you give are requested. There is no id-range crawling or search by design.
+- Requests are anonymous (no cookies or tokens), identify themselves in the `User-Agent`, wait 3 s between requests (never less than 1 s) and stop after `--max` downloads (default 100).
+- HTTP 429 stops the run immediately; three HTTP 403 in a row are treated as a block and also stop it. Files already saved are kept and skipped on the next run.
+- Reports that are private, removed or without a public body are reported as unavailable and not saved.
+- The saved Markdown has the source URL, program, weakness, severity, state and disclosure date, then the report text. The reporter's name is not copied.
+- The reports belong to their authors and programs. They are used here for local, personal study and are ignored by Git (`data/raw/writeups/`); do not commit or redistribute them, and check HackerOne's current terms before fetching many.
+
+### Local API
+
+The same analysis is available over HTTP so other tools (for example a recon pipeline) can call it:
+
+```bash
+python scripts/serve_api.py                 # http://127.0.0.1:8765, loopback only
+```
+
+```powershell
+$body = @{
+  host      = 'app.example.com'
+  stack     = @('Node', 'GraphQL')
+  endpoints = @('/graphql')
+  findings  = @('mutation updateOrder accepts another user orderId and returns 200')
+  top_k     = 4
+} | ConvertTo-Json
+
+# Send UTF-8 bytes explicitly: Windows PowerShell 5.1 would otherwise send Latin-1 and break accents.
+Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8765/analyze `
+  -ContentType 'application/json; charset=utf-8' `
+  -Body ([System.Text.Encoding]::UTF8.GetBytes($body))
+```
+
+- `POST /analyze` accepts a free-form `scenario` and/or structured `host`, `stack`, `endpoints`, `findings`, `notes`, plus `top_k` (1-10). It returns `answer`, `weak_match` (true when no report is a close match) and the `reports` used, with their `distance`.
+- `GET /health` returns `{"status": "ok"}`.
+- It binds to `127.0.0.1` by default. Binding to another address requires `WRITEUPS_API_TOKEN`; when the variable is set, every `POST` needs `Authorization: Bearer <token>`.
+- Requests are limited to 64 KB, analyses run one at a time (a single local GPU), and server errors are logged without being returned to the client.
+
+Run the tests with `python -m unittest discover -s tests -v`.
 
 ## Commit guidance
 
