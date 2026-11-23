@@ -72,7 +72,12 @@ class OllamaEmbeddingClient(OllamaClient):
 
 
 class OllamaGenerationClient(OllamaClient):
-    def generate(self, prompt: str, options: dict[str, object] | None = None) -> str:
+    def generate(
+        self,
+        prompt: str,
+        options: dict[str, object] | None = None,
+        response_format: str | dict[str, object] | None = None,
+    ) -> str:
         request_body: dict[str, object] = {
             "model": self.model,
             "messages": [{"role": "user", "content": prompt}],
@@ -81,6 +86,9 @@ class OllamaGenerationClient(OllamaClient):
         }
         if options:
             request_body["options"] = options
+        if response_format is not None:
+            # "json" or a JSON schema; makes Ollama constrain the output.
+            request_body["format"] = response_format
         payload = self._post_json("/api/chat", request_body)
 
         message = payload.get("message")

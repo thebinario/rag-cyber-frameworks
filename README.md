@@ -320,6 +320,33 @@ python scripts/ask_rag.py "How to use gobuster looking for subdomain?" --top-k 3
 
 RAG will always be slower than asking the local model directly because it first embeds the query, searches the vector index, and builds a grounded prompt with retrieved evidence before generation.
 
+## Writeups and scenario analysis
+
+Besides the framework documents, the repository can index real security writeups/reports and use them to reason about a scenario. Everything runs locally through Ollama.
+
+```text
+writeup (.md/.txt/.html/.pdf)
+  -> structured extraction (JSON: vuln class, stack, entry point, root cause, technique, bypass, impact)
+  -> embedding of the structured fields -> Chroma collection "writeups"
+scenario -> retrieve similar writeups -> grounded reasoning prompt -> hypotheses + safe validation steps
+```
+
+Put writeups in `data/raw/writeups/` (ignored by Git: it is third-party material) and run:
+
+```bash
+python scripts/ingest_writeups.py            # extract + index; already indexed files are skipped
+python scripts/ingest_writeups.py --force    # re-extract everything
+
+python scripts/analyze_scenario.py "GraphQL API, mutation updateOrder accepts another user's orderId and returns 200"
+python scripts/analyze_scenario.py -f scenario.txt --top-k 5 --show-context
+```
+
+The answer lists the reading of the scenario, analogies with stored reports, hypotheses (each tagged with the report it came from, or `general`), low-impact validation steps and what cannot be concluded yet. Use it only on targets you are authorized to test.
+
+Optional environment variables: `OLLAMA_EXTRACT_MODEL` (defaults to `OLLAMA_GENERATE_MODEL`), `OLLAMA_EXTRACT_TIMEOUT_SECONDS`. For an 8 GB GPU a 7B-8B model in Q4 (for example `qwen2.5:7b-instruct`) works well for extraction; a 4B model is enough to start.
+
+Run the tests with `python -m unittest discover -s tests -v`.
+
 ## Commit guidance
 
 Recommended to commit:

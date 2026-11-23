@@ -5,3 +5,6 @@ __pycache__/
 .tmp/
 data/vectorstore/chroma/
 agents.md
+# Writeups corpus is third-party material and stays local
+data/raw/writeups/
+data/processed/writeups/
