@@ -345,6 +345,29 @@ The answer lists the reading of the scenario, analogies with stored reports, hyp
 
 Optional environment variables: `OLLAMA_EXTRACT_MODEL` (defaults to `OLLAMA_GENERATE_MODEL`), `OLLAMA_EXTRACT_TIMEOUT_SECONDS`, `WRITEUPS_WEAK_MATCH_DISTANCE` (default `0.45`: when even the closest report is farther than this, the context carries a weak-similarity warning and the answer is flagged as speculative). For an 8 GB GPU a 7B-8B model in Q4 (for example `qwen2.5:7b-instruct`) works well for extraction; a 4B model is enough to start.
 
+### Local API
+
+The same analysis is available over HTTP so other tools (for example a recon pipeline) can call it:
+
+```bash
+python scripts/serve_api.py                 # http://127.0.0.1:8765, loopback only
+```
+
+```powershell
+Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8765/analyze -ContentType 'application/json' -Body (@{
+  host     = 'app.example.com'
+  stack    = @('Node', 'GraphQL')
+  endpoints = @('/graphql')
+  findings = @('mutation updateOrder accepts another user orderId and returns 200')
+  top_k    = 4
+} | ConvertTo-Json)
+```
+
+- `POST /analyze` accepts a free-form `scenario` and/or structured `host`, `stack`, `endpoints`, `findings`, `notes`, plus `top_k` (1-10). It returns `answer`, `weak_match` (true when no report is a close match) and the `reports` used, with their `distance`.
+- `GET /health` returns `{"status": "ok"}`.
+- It binds to `127.0.0.1` by default. Binding to another address requires `WRITEUPS_API_TOKEN`; when the variable is set, every `POST` needs `Authorization: Bearer <token>`.
+- Requests are limited to 64 KB, analyses run one at a time (a single local GPU), and server errors are logged without being returned to the client.
+
 Run the tests with `python -m unittest discover -s tests -v`.
 
 ## Commit guidance
