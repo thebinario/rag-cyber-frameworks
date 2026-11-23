@@ -23,7 +23,8 @@ MAX_CONSECUTIVE_BLOCKS = 3
 
 _REPORT_ID_PATTERN = re.compile(r"^(?:https?://(?:www\.)?hackerone\.com/reports/)?(\d{1,10})(?:[/?#.].*)?$")
 
-Opener = Callable[[request.Request, float], Any]
+# Called as opener(req, timeout=...): urlopen's second positional parameter is `data`, not timeout.
+Opener = Callable[..., Any]
 
 
 class FetchError(Exception):
@@ -125,7 +126,7 @@ def fetch_report_json(
 
     for attempt in range(MAX_RETRIES + 1):
         try:
-            with opener(http_request, REQUEST_TIMEOUT_SECONDS) as response:
+            with opener(http_request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
                 raw = response.read().decode("utf-8")
             break
         except error.HTTPError as exc:
