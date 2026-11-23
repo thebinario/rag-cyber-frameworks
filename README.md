@@ -343,7 +343,7 @@ python scripts/analyze_scenario.py -f scenario.txt --top-k 5 --show-context
 
 The answer lists the reading of the scenario, analogies with stored reports, hypotheses (each tagged with the report it came from, or `general`), low-impact validation steps and what cannot be concluded yet. Use it only on targets you are authorized to test.
 
-Optional environment variables: `OLLAMA_EXTRACT_MODEL` (defaults to `OLLAMA_GENERATE_MODEL`), `OLLAMA_EXTRACT_TIMEOUT_SECONDS`. For an 8 GB GPU a 7B-8B model in Q4 (for example `qwen2.5:7b-instruct`) works well for extraction; a 4B model is enough to start.
+Optional environment variables: `OLLAMA_EXTRACT_MODEL` (defaults to `OLLAMA_GENERATE_MODEL`), `OLLAMA_EXTRACT_TIMEOUT_SECONDS`, `WRITEUPS_WEAK_MATCH_DISTANCE` (default `0.45`: when even the closest report is farther than this, the context carries a weak-similarity warning and the answer is flagged as speculative). For an 8 GB GPU a 7B-8B model in Q4 (for example `qwen2.5:7b-instruct`) works well for extraction; a 4B model is enough to start.
 
 Run the tests with `python -m unittest discover -s tests -v`.
 

@@ -27,13 +27,39 @@ NO_REPORTS_NOTICE = (
     "No similar reports were found in the local writeups index. "
     "Any hypothesis below is general knowledge, not backed by a stored report."
 )
+# Cosine distance (0 = identical, 1 = unrelated). When even the closest report is farther
+# than this, retrieval is weak and the analysis must be treated as speculative.
+DEFAULT_WEAK_MATCH_DISTANCE = 0.45
+WEAK_MATCH_NOTICE = (
+    "WARNING: weak similarity. The closest report has distance {best:.3f} "
+    "(threshold {threshold:.2f}), so none of these reports is a strong match for the scenario."
+)
+
+
+def weak_match_threshold() -> float:
+    try:
+        return float(os.getenv("WRITEUPS_WEAK_MATCH_DISTANCE", DEFAULT_WEAK_MATCH_DISTANCE))
+    except ValueError:
+        return DEFAULT_WEAK_MATCH_DISTANCE
+
+
+def weak_match_warning(matches: list[tuple[dict[str, Any], float]]) -> str:
+    if not matches:
+        return ""
+    best = min(distance for _, distance in matches)
+    threshold = weak_match_threshold()
+    if best <= threshold:
+        return ""
+    return WEAK_MATCH_NOTICE.format(best=best, threshold=threshold)
 
 ANALYSIS_PROMPT = """You are an assistant for an authorized penetration tester. Reason about the SCENARIO using the SIMILAR REPORTS, which are real past cases.
 
 Rules:
 - Use only facts present in the scenario or in the reports. Do not invent endpoints, parameters, versions or results.
 - Name the report (by title) each hypothesis comes from. If a hypothesis is general knowledge and not from a report, label it "general".
+- A "general" hypothesis must not cite any report anywhere, including in its validation steps. Cite a report only for hypotheses that really come from it.
 - Ignore reports that are not really related to the scenario.
+- If a WARNING about weak similarity appears below, say clearly in section 5 that the hypotheses are speculative.
 - Suggest only low-impact, non-destructive validation steps, within the authorized scope. No exploitation of data you do not own, no denial of service.
 - If the information is not enough, say what is missing instead of guessing.
 
@@ -82,6 +108,9 @@ def format_reports_context(matches: list[tuple[dict[str, Any], float]]) -> str:
                 ]
             )
         )
+    warning = weak_match_warning(matches)
+    if warning:
+        blocks.insert(0, warning)
     return "\n\n".join(blocks)
 
 

@@ -85,6 +85,20 @@ class NormalizeExtractionTests(unittest.TestCase):
         )
         self.assertEqual(record.title, "file-name")
 
+    def test_generic_title_uses_entry_point(self):
+        record = self._normalize({"title": "IDOR", "vuln_class": "IDOR", "entry_point": "/getcomments"})
+        self.assertEqual(record.title, "IDOR in /getcomments")
+
+    def test_generic_title_falls_back_to_file_name(self):
+        record = normalize_extraction(
+            {"title": "idor", "vuln_class": "IDOR"}, source_path="a.md", content_hash="a" * 64, fallback_title="4191937"
+        )
+        self.assertEqual(record.title, "IDOR - 4191937")
+
+    def test_real_title_is_kept(self):
+        record = self._normalize({"title": "IDOR in orders API", "vuln_class": "IDOR", "entry_point": "orderId"})
+        self.assertEqual(record.title, "IDOR in orders API")
+
     def test_search_text_uses_structured_fields(self):
         record = self._normalize({"title": "T", "vuln_class": "SSRF", "root_cause": "no allowlist"})
         self.assertIn("SSRF", record.search_text())
@@ -164,6 +178,28 @@ class AnalyzerTests(unittest.TestCase):
         self.assertEqual(result.answer, "Final analysis")
         self.assertEqual(result.reports[0]["title"], "IDOR in orders API")
         self.assertIn("IDOR in orders API", generation.calls[0]["prompt"])
+
+    def test_weak_match_warning_when_all_reports_are_far(self):
+        context = analyzer.format_reports_context([(self.REPORT, 0.5), (self.REPORT, 0.6)])
+        self.assertTrue(context.startswith("WARNING: weak similarity"))
+        self.assertIn("0.500", context)
+
+    def test_no_warning_when_a_report_is_close(self):
+        context = analyzer.format_reports_context([(self.REPORT, 0.2), (self.REPORT, 0.6)])
+        self.assertNotIn("WARNING", context)
+
+    def test_weak_match_threshold_is_configurable(self):
+        with mock.patch.dict("os.environ", {"WRITEUPS_WEAK_MATCH_DISTANCE": "0.7"}):
+            context = analyzer.format_reports_context([(self.REPORT, 0.6)])
+        self.assertNotIn("WARNING", context)
+
+    def test_invalid_threshold_falls_back_to_default(self):
+        with mock.patch.dict("os.environ", {"WRITEUPS_WEAK_MATCH_DISTANCE": "abc"}):
+            self.assertEqual(analyzer.weak_match_threshold(), analyzer.DEFAULT_WEAK_MATCH_DISTANCE)
+
+    def test_prompt_forbids_citing_reports_for_general_hypotheses(self):
+        prompt = analyzer.build_analysis_prompt("s", "r")
+        self.assertIn('"general" hypothesis must not cite any report', prompt)
 
     def test_empty_scenario_is_rejected(self):
         with self.assertRaises(ValueError):
