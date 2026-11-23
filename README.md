@@ -349,6 +349,23 @@ The answer lists the reading of the scenario, analogies with stored reports, hyp
 
 Optional environment variables: `OLLAMA_EXTRACT_MODEL` (defaults to `OLLAMA_GENERATE_MODEL`), `OLLAMA_EXTRACT_TIMEOUT_SECONDS`, `WRITEUPS_WEAK_MATCH_DISTANCE` (default `0.45`: when even the closest report is farther than this, the context carries a weak-similarity warning and the answer is flagged as speculative). For an 8 GB GPU a 7B-8B model in Q4 (for example `qwen2.5:7b-instruct`) works well for extraction; a 4B model is enough to start.
 
+### Fetching HackerOne reports
+
+`scripts/fetch_writeups.py` downloads **publicly disclosed** HackerOne reports and saves each one as `data/raw/writeups/<id>.md`, ready for `ingest_writeups.py`. It reads the public `https://hackerone.com/reports/<id>.json` endpoint (the HTML page needs JavaScript, so it is not used).
+
+```bash
+python scripts/fetch_writeups.py 2119149 https://hackerone.com/reports/4175245
+python scripts/fetch_writeups.py --from-file report_ids.txt     # one id or URL per line, '#' comments allowed
+python scripts/ingest_writeups.py
+```
+
+- Only the ids you give are requested. There is no id-range crawling or search by design.
+- Requests are anonymous (no cookies or tokens), identify themselves in the `User-Agent`, wait 3 s between requests (never less than 1 s) and stop after `--max` downloads (default 100).
+- HTTP 429 stops the run immediately; three HTTP 403 in a row are treated as a block and also stop it. Files already saved are kept and skipped on the next run.
+- Reports that are private, removed or without a public body are reported as unavailable and not saved.
+- The saved Markdown has the source URL, program, weakness, severity, state and disclosure date, then the report text. The reporter's name is not copied.
+- The reports belong to their authors and programs. They are used here for local, personal study and are ignored by Git (`data/raw/writeups/`); do not commit or redistribute them, and check HackerOne's current terms before fetching many.
+
 ### Local API
 
 The same analysis is available over HTTP so other tools (for example a recon pipeline) can call it:
