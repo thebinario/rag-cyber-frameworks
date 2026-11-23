@@ -19,6 +19,7 @@ from .schema import WriteupRecord, compute_content_hash, normalize_extraction
 from .store import (
     DEFAULT_WRITEUPS_COLLECTION_NAME,
     build_embedding_client,
+    embedding_format,
     index_writeup,
     search_writeups,
     writeup_is_indexed,
@@ -37,6 +38,7 @@ __all__ = [
     "build_extraction_prompt",
     "compute_content_hash",
     "discover_writeup_files",
+    "embedding_format",
     "extract_writeup",
     "format_reports_context",
     "index_writeup",

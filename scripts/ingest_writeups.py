@@ -18,6 +18,7 @@ from app.writeups import (
     build_embedding_client,
     build_extraction_client,
     compute_content_hash,
+    embedding_format,
     discover_writeup_files,
     extract_writeup,
     index_writeup,
@@ -74,7 +75,9 @@ def main() -> None:
         try:
             text = load_writeup_text(path)
             content_hash = compute_content_hash(text)
-            if not args.force and writeup_is_indexed(content_hash, PERSIST_DIRECTORY):
+            if not args.force and writeup_is_indexed(
+                content_hash, PERSIST_DIRECTORY, expected_format=embedding_format(embedding_client)
+            ):
                 print(f"[skip] already indexed: {label}")
                 skipped += 1
                 continue

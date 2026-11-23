@@ -22,6 +22,32 @@ DEFAULT_WRITEUPS_TOP_K = 4
 DEFAULT_OLLAMA_EMBED_MODEL = "nomic-embed-text"
 DEFAULT_EMBED_TIMEOUT_SECONDS = 60
 
+# nomic-embed-text was trained with task prefixes. Without them retrieval quality drops,
+# so documents and queries must carry them. Other models are used as they are.
+NOMIC_DOCUMENT_PREFIX = "search_document: "
+NOMIC_QUERY_PREFIX = "search_query: "
+PLAIN_EMBEDDING_FORMAT = "plain"
+NOMIC_EMBEDDING_FORMAT = "nomic-prefix-v1"
+
+
+def _uses_nomic_prefixes(model: str) -> bool:
+    return "nomic-embed" in model.lower()
+
+
+def embedding_format(client: OllamaEmbeddingClient) -> str:
+    """Identifies how texts are embedded, so entries indexed another way can be refreshed."""
+    return NOMIC_EMBEDDING_FORMAT if _uses_nomic_prefixes(client.model) else PLAIN_EMBEDDING_FORMAT
+
+
+def embed_document(client: OllamaEmbeddingClient, text: str) -> list[float]:
+    prefix = NOMIC_DOCUMENT_PREFIX if _uses_nomic_prefixes(client.model) else ""
+    return client.embed(prefix + text)
+
+
+def embed_query(client: OllamaEmbeddingClient, text: str) -> list[float]:
+    prefix = NOMIC_QUERY_PREFIX if _uses_nomic_prefixes(client.model) else ""
+    return client.embed(prefix + text)
+
 
 def build_embedding_client(
     base_url: str | None = None,
@@ -69,9 +95,17 @@ def writeup_is_indexed(
     content_hash: str,
     persist_directory: str | Path = DEFAULT_CHROMA_PERSIST_DIRECTORY,
     collection_name: str = DEFAULT_WRITEUPS_COLLECTION_NAME,
+    expected_format: str | None = None,
 ) -> bool:
+    """True when the writeup is indexed. With expected_format, entries embedded another way count as not indexed."""
     collection = _get_collection(persist_directory, collection_name, create=True)
-    return bool(collection.get(ids=[content_hash[:32]])["ids"])
+    found = collection.get(ids=[content_hash[:32]], include=["metadatas"])
+    if not found["ids"]:
+        return False
+    if expected_format is None:
+        return True
+    metadata = (found.get("metadatas") or [{}])[0] or {}
+    return metadata.get("embedding_format") == expected_format
 
 
 def index_writeup(
@@ -80,7 +114,7 @@ def index_writeup(
     persist_directory: str | Path = DEFAULT_CHROMA_PERSIST_DIRECTORY,
     collection_name: str = DEFAULT_WRITEUPS_COLLECTION_NAME,
 ) -> None:
-    embedding = client.embed(record.search_text())
+    embedding = embed_document(client, record.search_text())
     collection = _get_collection(persist_directory, collection_name, create=True)
     collection.upsert(
         ids=[record.writeup_id],
@@ -93,6 +127,7 @@ def index_writeup(
                 "severity": record.severity,
                 "source_path": record.source_path,
                 "embedding_model": client.model,
+                "embedding_format": embedding_format(client),
             }
         ],
     )
@@ -116,7 +151,7 @@ def search_writeups(
         return []
 
     result = collection.query(
-        query_embeddings=[client.embed(query)],
+        query_embeddings=[embed_query(client, query)],
         n_results=min(top_k, collection.count()),
     )
     documents = result.get("documents", [[]])[0]
