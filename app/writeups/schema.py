@@ -84,6 +84,25 @@ def _clean_str_list(value: object) -> list[str]:
     return cleaned
 
 
+def improve_generic_title(
+    title: str,
+    vuln_class: str,
+    entry_point: str,
+    fallback_title: str = "",
+) -> str:
+    """A title that only repeats the vulnerability class ("IDOR") cannot tell reports apart.
+
+    Prefer "<class> in <entry point>", then "<class> - <file name>". Real titles are kept as is.
+    """
+    if not vuln_class or title.strip().lower() != vuln_class.strip().lower():
+        return title
+    if entry_point:
+        return f"{vuln_class} in {entry_point}"[:MAX_FIELD_CHARACTERS]
+    if fallback_title and fallback_title.strip().lower() != title.strip().lower():
+        return f"{vuln_class} - {fallback_title}"
+    return title
+
+
 def normalize_severity(value: object) -> str:
     text = _clean_str(value).lower()
     return text if text in ALLOWED_SEVERITIES else UNKNOWN_SEVERITY
@@ -100,16 +119,19 @@ def normalize_extraction(
     """Turn raw model output into a WriteupRecord. Missing fields become empty, never invented."""
     title = _clean_str(payload.get("title")) or fallback_title
     vuln_class = _clean_str(payload.get("vuln_class"))
+    entry_point = _clean_str(payload.get("entry_point"))
 
     if not (title or vuln_class):
         raise ValueError("extraction has neither a title nor a vulnerability class")
+
+    title = improve_generic_title(title, vuln_class, entry_point, fallback_title)
 
     return WriteupRecord(
         writeup_id=content_hash[:32],
         title=title,
         vuln_class=vuln_class,
         stack=_clean_str_list(payload.get("stack")),
-        entry_point=_clean_str(payload.get("entry_point")),
+        entry_point=entry_point,
         root_cause=_clean_str(payload.get("root_cause")),
         technique=_clean_str(payload.get("technique")),
         bypass_notes=_clean_str(payload.get("bypass_notes")),
