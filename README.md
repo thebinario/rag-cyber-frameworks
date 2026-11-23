@@ -192,7 +192,7 @@ Optional environment variables:
 ```bash
 set OLLAMA_BASE_URL=http://127.0.0.1:11434
 set OLLAMA_EMBED_MODEL=nomic-embed-text
-set OLLAMA_GENERATE_MODEL=qwen3.5:4b
+set OLLAMA_GENERATE_MODEL=qwen2.5:7b-instruct
 set OLLAMA_EMBED_TIMEOUT_SECONDS=30
 set OLLAMA_GENERATE_TIMEOUT_SECONDS=300
 ```
@@ -281,7 +281,7 @@ python scripts/retrieve_context.py "how to use gobuster looking for subdomain" -
 Pull a local generation model:
 
 ```bash
-ollama pull qwen3.5:4b
+ollama pull qwen2.5:7b-instruct
 ```
 
 Run the full retrieval + generation flow:
