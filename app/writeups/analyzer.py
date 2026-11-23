@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
@@ -90,6 +91,34 @@ class ScenarioAnalysis:
     retrieval_query: str = ""
 
 
+DEFAULT_CLASS_BONUS = 0.05
+_POSSIBLE_CLASSES_PATTERN = re.compile(r"possible classes\s*:\s*(.+)$", re.IGNORECASE | re.DOTALL)
+
+
+def class_bonus() -> float:
+    """Distance discount for a report whose vulnerability class the rewrite named. 0 disables it."""
+    try:
+        return max(0.0, float(os.getenv("WRITEUPS_CLASS_BONUS", DEFAULT_CLASS_BONUS)))
+    except ValueError:
+        return DEFAULT_CLASS_BONUS
+
+
+def parse_possible_classes(retrieval_query: str) -> list[str]:
+    """Extract the class names after "Possible classes:" ("IDOR / broken object level authorization, SSRF")."""
+    match = _POSSIBLE_CLASSES_PATTERN.search(retrieval_query or "")
+    if match is None:
+        return []
+    names = re.split(r"[,/;]|\bor\b|\band\b", match.group(1).strip().rstrip(".").lower())
+    return [name.strip() for name in names if len(name.strip()) >= 3]
+
+
+def report_matches_classes(report: dict[str, Any], classes: list[str]) -> bool:
+    report_class = str(report.get("vuln_class") or "").strip().lower()
+    if len(report_class) < 3:
+        return False
+    return any(report_class == name or report_class in name or name in report_class for name in classes)
+
+
 def format_reports_context(matches: list[tuple[dict[str, Any], float]]) -> str:
     if not matches:
         return NO_REPORTS_NOTICE
@@ -139,15 +168,27 @@ def build_analysis_client(
 def merge_matches(
     result_sets: list[list[tuple[dict[str, Any], float]]],
     top_k: int,
+    classes: list[str] | None = None,
 ) -> list[tuple[dict[str, Any], float]]:
-    """Combine results of several queries: one entry per writeup, best (smallest) distance wins."""
+    """Combine results of several queries: one entry per writeup, best (smallest) distance wins.
+
+    Reports whose class was named by the query rewrite are ranked slightly higher (class_bonus).
+    The returned distance stays the raw one, so weak-match checks and displays are not distorted.
+    """
     best: dict[str, tuple[dict[str, Any], float]] = {}
     for results in result_sets:
         for report, distance in results:
             key = str(report.get("writeup_id") or report.get("source_path") or report.get("title"))
             if key not in best or distance < best[key][1]:
                 best[key] = (report, distance)
-    return sorted(best.values(), key=lambda item: item[1])[:top_k]
+
+    bonus = class_bonus() if classes else 0.0
+
+    def ranking_score(item: tuple[dict[str, Any], float]) -> float:
+        report, distance = item
+        return distance - bonus if bonus and report_matches_classes(report, classes or []) else distance
+
+    return sorted(best.values(), key=ranking_score)[:top_k]
 
 
 def retrieve_similar(
@@ -168,7 +209,8 @@ def retrieve_similar(
         search_writeups(query, client=embed_client, persist_directory=persist_directory, top_k=top_k)
         for query in queries
     ]
-    return merge_matches(result_sets, top_k), retrieval_query if len(queries) > 1 else ""
+    used_query = retrieval_query if len(queries) > 1 else ""
+    return merge_matches(result_sets, top_k, parse_possible_classes(used_query)), used_query
 
 
 def _prepare(

@@ -73,6 +73,53 @@ class MergeMatchesTests(unittest.TestCase):
         self.assertEqual(merged[0][0]["writeup_id"], "idor")
 
 
+class ClassBonusTests(unittest.TestCase):
+    # Values observed on a real run: the IDOR report was 0.011 behind an unrelated XSS report.
+    QUERY = "GraphQL mutation updateOrder accepts another user's orderId and returns 200 Possible classes: IDOR, SSRF"
+    RESULTS = [[(XSS, 0.3707), (IDOR, 0.3818)]]
+
+    def test_parse_possible_classes(self):
+        self.assertEqual(analyzer.parse_possible_classes(self.QUERY), ["idor", "ssrf"])
+        self.assertEqual(
+            analyzer.parse_possible_classes("x. Possible classes: IDOR / broken object level authorization, SQL injection."),
+            ["idor", "broken object level authorization", "sql injection"],
+        )
+        self.assertEqual(analyzer.parse_possible_classes("no classes here"), [])
+        self.assertEqual(analyzer.parse_possible_classes(""), [])
+
+    def test_named_class_overtakes_a_slightly_closer_unrelated_report(self):
+        classes = analyzer.parse_possible_classes(self.QUERY)
+        merged = analyzer.merge_matches(self.RESULTS, top_k=2, classes=classes)
+        self.assertEqual([r["writeup_id"] for r, _ in merged], ["idor", "xss"])
+
+    def test_returned_distances_are_the_raw_ones(self):
+        merged = analyzer.merge_matches(self.RESULTS, top_k=2, classes=["idor"])
+        self.assertEqual(dict((r["writeup_id"], d) for r, d in merged), {"idor": 0.3818, "xss": 0.3707})
+
+    def test_bonus_does_not_beat_a_clearly_closer_report(self):
+        far_idor = [[(XSS, 0.30), (IDOR, 0.50)]]
+        merged = analyzer.merge_matches(far_idor, top_k=2, classes=["idor"])
+        self.assertEqual(merged[0][0]["writeup_id"], "xss")
+
+    def test_no_classes_keeps_plain_distance_order(self):
+        merged = analyzer.merge_matches(self.RESULTS, top_k=2, classes=[])
+        self.assertEqual(merged[0][0]["writeup_id"], "xss")
+
+    def test_bonus_can_be_disabled(self):
+        with mock.patch.dict("os.environ", {"WRITEUPS_CLASS_BONUS": "0"}):
+            merged = analyzer.merge_matches(self.RESULTS, top_k=2, classes=["idor"])
+        self.assertEqual(merged[0][0]["writeup_id"], "xss")
+
+    def test_invalid_bonus_falls_back_to_default(self):
+        with mock.patch.dict("os.environ", {"WRITEUPS_CLASS_BONUS": "abc"}):
+            self.assertEqual(analyzer.class_bonus(), analyzer.DEFAULT_CLASS_BONUS)
+
+    def test_class_match_is_not_a_substring_accident(self):
+        self.assertFalse(analyzer.report_matches_classes({"vuln_class": "XS"}, ["xss"]))
+        self.assertFalse(analyzer.report_matches_classes({"vuln_class": ""}, ["idor"]))
+        self.assertTrue(analyzer.report_matches_classes({"vuln_class": "SQL Injection"}, ["sql injection"]))
+
+
 class RetrieveSimilarTests(unittest.TestCase):
     def _search(self, query, **kwargs):
         # The original (Portuguese) query ranks XSS first; the English rewrite finds IDOR.
