@@ -153,9 +153,18 @@ def make_handler(analyze: AnalyzeFunction, token: str | None = None) -> type[Bas
                 raise RequestError(400, "request body is required")
             if length > MAX_BODY_BYTES:
                 raise RequestError(413, f"request body is larger than {MAX_BODY_BYTES} bytes")
+            raw_body = self.rfile.read(length)
             try:
-                payload = json.loads(self.rfile.read(length).decode("utf-8"))
-            except (UnicodeDecodeError, json.JSONDecodeError):
+                text = raw_body.decode("utf-8")
+            except UnicodeDecodeError:
+                raise RequestError(
+                    400,
+                    "body must be UTF-8 encoded JSON (Windows PowerShell 5.1 sends Latin-1 by default; "
+                    "send the body as UTF-8 bytes with charset=utf-8)",
+                ) from None
+            try:
+                payload = json.loads(text)
+            except json.JSONDecodeError:
                 raise RequestError(400, "body must be valid JSON") from None
             if not isinstance(payload, dict):
                 raise RequestError(400, "body must be a JSON object")

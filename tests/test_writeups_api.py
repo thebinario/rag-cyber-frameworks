@@ -104,6 +104,17 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(self._post("/analyze", None, raw=b"not json")[0], 400)
         self.assertEqual(self._post("/analyze", None, raw=b"[1,2]")[0], 400)
 
+    def test_latin1_body_gets_a_helpful_error(self):
+        raw = '{"scenario": "usuário"}'.encode("latin-1")
+        status, body = self._post("/analyze", None, raw=raw)
+        self.assertEqual(status, 400)
+        self.assertIn("UTF-8", body["error"])
+
+    def test_utf8_accents_are_accepted(self):
+        status, body = self._post("/analyze", {"scenario": "usuário não autorizado"})
+        self.assertEqual(status, 200)
+        self.assertIn("usuário", body["scenario"])
+
     def test_oversized_body_is_rejected(self):
         status, _ = self._post("/analyze", None, raw=b"x" * (api.MAX_BODY_BYTES + 1))
         self.assertEqual(status, 413)

@@ -354,13 +354,18 @@ python scripts/serve_api.py                 # http://127.0.0.1:8765, loopback on
 ```
 
 ```powershell
-Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8765/analyze -ContentType 'application/json' -Body (@{
-  host     = 'app.example.com'
-  stack    = @('Node', 'GraphQL')
+$body = @{
+  host      = 'app.example.com'
+  stack     = @('Node', 'GraphQL')
   endpoints = @('/graphql')
-  findings = @('mutation updateOrder accepts another user orderId and returns 200')
-  top_k    = 4
-} | ConvertTo-Json)
+  findings  = @('mutation updateOrder accepts another user orderId and returns 200')
+  top_k     = 4
+} | ConvertTo-Json
+
+# Send UTF-8 bytes explicitly: Windows PowerShell 5.1 would otherwise send Latin-1 and break accents.
+Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8765/analyze `
+  -ContentType 'application/json; charset=utf-8' `
+  -Body ([System.Text.Encoding]::UTF8.GetBytes($body))
 ```
 
 - `POST /analyze` accepts a free-form `scenario` and/or structured `host`, `stack`, `endpoints`, `findings`, `notes`, plus `top_k` (1-10). It returns `answer`, `weak_match` (true when no report is a close match) and the `reports` used, with their `distance`.
