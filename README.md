@@ -343,6 +343,8 @@ python scripts/analyze_scenario.py -f scenario.txt --top-k 5 --show-context
 
 With `nomic-embed-text` the writeups are embedded with the `search_document: ` / `search_query: ` task prefixes the model was trained for. Each indexed entry records its `embedding_format`, so after upgrading, a plain `python scripts/ingest_writeups.py` re-extracts and re-indexes entries created without prefixes. Other embedding models are used without prefixes.
 
+Before searching, the local model rewrites the scenario as a short English query with likely vulnerability classes (the stored reports are in English, so scenarios written in Portuguese match poorly otherwise). Both the original text and the rewrite are searched and the best distance per report wins. The rewrite is used only for retrieval: the analysis prompt always receives your original scenario. Set `WRITEUPS_QUERY_REWRITE=0` to turn it off; the API returns the query that was used as `retrieval_query`.
+
 The answer lists the reading of the scenario, analogies with stored reports, hypotheses (each tagged with the report it came from, or `general`), low-impact validation steps and what cannot be concluded yet. Use it only on targets you are authorized to test.
 
 Optional environment variables: `OLLAMA_EXTRACT_MODEL` (defaults to `OLLAMA_GENERATE_MODEL`), `OLLAMA_EXTRACT_TIMEOUT_SECONDS`, `WRITEUPS_WEAK_MATCH_DISTANCE` (default `0.45`: when even the closest report is farther than this, the context carries a weak-similarity warning and the answer is flagged as speculative). For an 8 GB GPU a 7B-8B model in Q4 (for example `qwen2.5:7b-instruct`) works well for extraction; a 4B model is enough to start.

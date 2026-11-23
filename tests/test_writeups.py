@@ -177,7 +177,7 @@ class AnalyzerTests(unittest.TestCase):
         self.assertEqual(search.call_args.kwargs["top_k"], 3)
         self.assertEqual(result.answer, "Final analysis")
         self.assertEqual(result.reports[0]["title"], "IDOR in orders API")
-        self.assertIn("IDOR in orders API", generation.calls[0]["prompt"])
+        self.assertIn("IDOR in orders API", generation.calls[-1]["prompt"])  # last call is the analysis
 
     def test_weak_match_warning_when_all_reports_are_far(self):
         context = analyzer.format_reports_context([(self.REPORT, 0.5), (self.REPORT, 0.6)])

@@ -14,6 +14,7 @@ from app.rag.generator import (
 )
 from app.rag.vector_store import DEFAULT_CHROMA_PERSIST_DIRECTORY
 
+from .query_rewrite import rewrite_scenario
 from .store import DEFAULT_WRITEUPS_TOP_K, search_writeups
 
 
@@ -86,6 +87,7 @@ class ScenarioAnalysis:
     distances: list[float]
     context: str
     answer: str
+    retrieval_query: str = ""
 
 
 def format_reports_context(matches: list[tuple[dict[str, Any], float]]) -> str:
@@ -134,23 +136,67 @@ def build_analysis_client(
     )
 
 
+def merge_matches(
+    result_sets: list[list[tuple[dict[str, Any], float]]],
+    top_k: int,
+) -> list[tuple[dict[str, Any], float]]:
+    """Combine results of several queries: one entry per writeup, best (smallest) distance wins."""
+    best: dict[str, tuple[dict[str, Any], float]] = {}
+    for results in result_sets:
+        for report, distance in results:
+            key = str(report.get("writeup_id") or report.get("source_path") or report.get("title"))
+            if key not in best or distance < best[key][1]:
+                best[key] = (report, distance)
+    return sorted(best.values(), key=lambda item: item[1])[:top_k]
+
+
+def retrieve_similar(
+    scenario: str,
+    embed_client: OllamaEmbeddingClient,
+    generation_client: OllamaGenerationClient | None = None,
+    persist_directory: str | Path = DEFAULT_CHROMA_PERSIST_DIRECTORY,
+    top_k: int = DEFAULT_WRITEUPS_TOP_K,
+) -> tuple[list[tuple[dict[str, Any], float]], str]:
+    """Search with the original scenario and with an English rewrite; return (matches, rewrite used)."""
+    retrieval_query = rewrite_scenario(scenario, generation_client) if generation_client is not None else ""
+
+    queries = [scenario]
+    if retrieval_query and retrieval_query.lower() != scenario.strip().lower():
+        queries.append(retrieval_query)
+
+    result_sets = [
+        search_writeups(query, client=embed_client, persist_directory=persist_directory, top_k=top_k)
+        for query in queries
+    ]
+    return merge_matches(result_sets, top_k), retrieval_query if len(queries) > 1 else ""
+
+
+def _prepare(
+    scenario: str,
+    embed_client: OllamaEmbeddingClient,
+    generation_client: OllamaGenerationClient | None,
+    persist_directory: str | Path,
+    top_k: int,
+) -> tuple[list[tuple[dict[str, Any], float]], str, str, str]:
+    if not scenario.strip():
+        raise ValueError("scenario must not be empty")
+
+    matches, retrieval_query = retrieve_similar(
+        scenario, embed_client, generation_client, persist_directory, top_k
+    )
+    context = format_reports_context(matches)
+    return matches, context, build_analysis_prompt(scenario, context), retrieval_query
+
+
 def prepare_analysis(
     scenario: str,
     embed_client: OllamaEmbeddingClient,
     persist_directory: str | Path = DEFAULT_CHROMA_PERSIST_DIRECTORY,
     top_k: int = DEFAULT_WRITEUPS_TOP_K,
+    generation_client: OllamaGenerationClient | None = None,
 ) -> tuple[list[tuple[dict[str, Any], float]], str, str]:
-    if not scenario.strip():
-        raise ValueError("scenario must not be empty")
-
-    matches = search_writeups(
-        scenario,
-        client=embed_client,
-        persist_directory=persist_directory,
-        top_k=top_k,
-    )
-    context = format_reports_context(matches)
-    return matches, context, build_analysis_prompt(scenario, context)
+    matches, context, prompt, _ = _prepare(scenario, embed_client, generation_client, persist_directory, top_k)
+    return matches, context, prompt
 
 
 def analyze_scenario(
@@ -160,7 +206,9 @@ def analyze_scenario(
     persist_directory: str | Path = DEFAULT_CHROMA_PERSIST_DIRECTORY,
     top_k: int = DEFAULT_WRITEUPS_TOP_K,
 ) -> ScenarioAnalysis:
-    matches, context, prompt = prepare_analysis(scenario, embed_client, persist_directory, top_k)
+    matches, context, prompt, retrieval_query = _prepare(
+        scenario, embed_client, generation_client, persist_directory, top_k
+    )
     answer = strip_think_tags(generation_client.generate(prompt, options=DEFAULT_ANALYSIS_OPTIONS))
     return ScenarioAnalysis(
         scenario=scenario.strip(),
@@ -168,6 +216,7 @@ def analyze_scenario(
         distances=[distance for _, distance in matches],
         context=context,
         answer=answer,
+        retrieval_query=retrieval_query,
     )
 
 
@@ -178,5 +227,7 @@ def stream_scenario_analysis(
     persist_directory: str | Path = DEFAULT_CHROMA_PERSIST_DIRECTORY,
     top_k: int = DEFAULT_WRITEUPS_TOP_K,
 ) -> tuple[list[tuple[dict[str, Any], float]], str, Iterator[str]]:
-    matches, context, prompt = prepare_analysis(scenario, embed_client, persist_directory, top_k)
+    matches, context, prompt, _ = _prepare(
+        scenario, embed_client, generation_client, persist_directory, top_k
+    )
     return matches, context, generation_client.generate_stream(prompt, options=DEFAULT_ANALYSIS_OPTIONS)

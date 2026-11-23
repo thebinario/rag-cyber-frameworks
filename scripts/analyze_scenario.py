@@ -64,6 +64,8 @@ def main() -> None:
             top_k=args.top_k,
         )
         print(analysis.answer)
+        if analysis.retrieval_query:
+            print(f"\n[search query used: {analysis.retrieval_query}]")
         reports = analysis.reports
         distances = analysis.distances
         context = analysis.context

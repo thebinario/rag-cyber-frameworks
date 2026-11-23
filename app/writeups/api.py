@@ -104,6 +104,7 @@ def build_default_analyze_function(persist_directory: str | Path) -> AnalyzeFunc
         return {
             "scenario": analysis.scenario,
             "answer": analysis.answer,
+            "retrieval_query": analysis.retrieval_query,
             "weak_match": bool(weak_match_warning(matches)),
             "reports": [
                 {

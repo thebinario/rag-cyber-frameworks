@@ -15,6 +15,7 @@ from .extractor import (
     load_writeup_text,
     parse_json_object,
 )
+from .query_rewrite import rewrite_scenario
 from .schema import WriteupRecord, compute_content_hash, normalize_extraction
 from .store import (
     DEFAULT_WRITEUPS_COLLECTION_NAME,
@@ -45,6 +46,7 @@ __all__ = [
     "load_writeup_text",
     "normalize_extraction",
     "parse_json_object",
+    "rewrite_scenario",
     "search_writeups",
     "stream_scenario_analysis",
     "writeup_is_indexed",
